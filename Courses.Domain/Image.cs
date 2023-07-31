@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Courses.Domain
 {
-    internal class Chats
+    public class Image
     {
+        public Guid Id { get; set; }
+        public string Path { get; set; }
+
     }
 }
