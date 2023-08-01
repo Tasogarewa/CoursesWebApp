@@ -1,18 +1,17 @@
-﻿using System;
+﻿using Courses.Domain;
+using MediatR;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Courses.Domain
+namespace Tasogarewa.Application.CQRS.Courses.Commands.UpdateCourse
 {
-    public  class Course
+    public class UpdateCourseCommand:IRequest<Guid>
     {
         public Guid Id { get; set; }
-        public DateTime CreateAt { get; set; }
-        public DateTime? UpdateAt { get; set; }
         public decimal Price { get; set; }
         public DateTime Expires { get; set; }
         [MinLength(4)]
@@ -21,12 +20,8 @@ namespace Courses.Domain
         [MinLength(300)]
         [MaxLength(2000)]
         public string Description { get; set; }
-        public virtual AppUser appUser { get; set; }
         public string FilePath { get; set; }
-        public virtual ICollection<Image> Images { get; set; } = new List<Image>();
-        public int Rating { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
-   
+        public  ICollection<Image> Images { get; set; } = new List<Image>();
+      
     }
 }
