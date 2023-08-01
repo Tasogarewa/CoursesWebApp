@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD363C90-FB22-41D8-B42E-CAE00EE62B11}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ifrastracture", "Ifrastracture", "{266D8FBC-E27E-47BD-9FCD-418CBE38568B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastracture", "Infrastracture", "{266D8FBC-E27E-47BD-9FCD-418CBE38568B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{7C2A577A-AB4C-4CC6-9CC0-3EB5A9711E41}"
 EndProject
@@ -13,11 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{64B7E4C3-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tasogarewa.Domain", "Courses.Domain\Tasogarewa.Domain.csproj", "{63267035-0F12-49AB-8B68-BA5A46369D3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasogarewa.Application", "Courses.Application\Tasogarewa.Application.csproj", "{6E5DE652-A379-479B-B0B7-4E473EF15E67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tasogarewa.Application", "Courses.Application\Tasogarewa.Application.csproj", "{6E5DE652-A379-479B-B0B7-4E473EF15E67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasogarewa.Persistance", "Courses.Persistance\Tasogarewa.Persistance.csproj", "{10DC1661-5E6B-45F5-8E37-991921A5893F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tasogarewa.Persistance", "Courses.Persistance\Tasogarewa.Persistance.csproj", "{10DC1661-5E6B-45F5-8E37-991921A5893F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoursesWebAPI", "CoursesWebAPI\CoursesWebAPI.csproj", "{3DB74073-EE84-4941-8DA8-8244C38197F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoursesWebAPI", "CoursesWebAPI\CoursesWebAPI.csproj", "{3DB74073-EE84-4941-8DA8-8244C38197F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
