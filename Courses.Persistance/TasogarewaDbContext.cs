@@ -19,7 +19,7 @@ namespace Tasogarewa.Persistance
         public virtual DbSet<Comment> Comments { get; set; }
         public TasogarewaDbContext(DbContextOptions<TasogarewaDbContext> options):base(options)
         {
-            Database.Migrate();
+            Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
