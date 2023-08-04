@@ -1,3 +1,4 @@
+using CoursesWebAPI.Middleware;
 using System.Reflection;
 using Tasogarewa.Application;
 using Tasogarewa.Application.Common.Mapping;
@@ -48,6 +49,7 @@ policy.AllowAnyOrigin();
         app.UseHttpsRedirection();
 app.UseEndpoints(endpoints =>
 endpoints.MapControllers());
+app.UseCustomExceptionHandler();
         app.UseAuthorization();
         app.MapControllers();
         app.Run();

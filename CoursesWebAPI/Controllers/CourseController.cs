@@ -21,7 +21,7 @@ namespace CoursesWebAPI.Controllers
         {
             var query = new GetCoursesQuery
             {
-
+                 UserId = UserId
             };
 
             var vm = await mediator.Send(query);

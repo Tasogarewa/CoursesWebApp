@@ -9,6 +9,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {
     public class GetCoursesQuery:IRequest<ChatListVm>
     {
+        public Guid UserId { get; set; }
        
     }
 }

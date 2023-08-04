@@ -9,7 +9,7 @@ namespace Tasogarewa.Application.CQRS.Chats.Commands.CreateChat
 {
     public class CreateChatCommand : IRequest<Guid>
     {
-        public Guid Id { get; set; }
+   
         public ICollection<AppUser> Users { get; set; }
        
     }

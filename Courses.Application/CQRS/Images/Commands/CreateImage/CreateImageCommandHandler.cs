@@ -27,12 +27,12 @@ namespace Tasogarewa.Application.CQRS.Images.Commands.CreateImage
         {
             if (request.CourseId != null)
             {
-                var image = await ImagesRepository.Create(new Image() { Id = request.Id, Path = request.Path, Course = await CoursesRepository.GetAsync((Guid)request.CourseId), appUser =await UsersRepository.GetAsync(request.UserId) });
+                var image = await ImagesRepository.Create(new Image() {  Path = request.Path, Course = await CoursesRepository.GetAsync((Guid)request.CourseId), appUser =await UsersRepository.GetAsync(request.UserId) });
                 return image.Id;
             }
             else
             {
-                var image = await ImagesRepository.Create(new Image() { Id = request.Id, Path = request.Path, appUser = await UsersRepository.GetAsync(request.UserId) });
+                var image = await ImagesRepository.Create(new Image() {  Path = request.Path, appUser = await UsersRepository.GetAsync(request.UserId) });
                 return image.Id;
             }
         }

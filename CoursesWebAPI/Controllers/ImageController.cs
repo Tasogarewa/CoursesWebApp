@@ -20,11 +20,11 @@ namespace CoursesWebAPI.Controllers
         private readonly IMapper Mapper;
         public ImageController(IMapper mapper) => Mapper = mapper;
         [HttpGet]
-        public async Task<ActionResult<ImageListVm>> GetAll()
+        public async Task<ActionResult<ImageListVm>> GetAll(Guid CourseId)
         {
             var query = new GetImagesQuery
             {
-
+                CourseId = CourseId   
             };
             var vm = await mediator.Send(query);
             return Ok(vm);

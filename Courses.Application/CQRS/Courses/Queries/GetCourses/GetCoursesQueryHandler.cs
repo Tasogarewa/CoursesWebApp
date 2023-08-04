@@ -26,7 +26,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
         public async Task<ChatListVm> Handle(GetCoursesQuery request, CancellationToken cancellationToken)
         {
             var courses = await CoursesRepository.GetAllAsync();
-            if (courses == null)
+            if (courses == null||request.UserId==Guid.Empty)
             {
                 throw new NotFoundException(nameof(courses), 0);
             }
