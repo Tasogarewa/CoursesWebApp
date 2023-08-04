@@ -24,7 +24,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.DeleteCourse
         public async Task<Unit> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
         {
             var course = await CoursesRepository.GetAsync(request.Id);
-            if (course == null || course.Id != request.Id)
+            if (course == null || course.Id != request.Id||course.appUser.Id!=request.UserId)
             {
                 throw new NotFoundException(nameof(course), request.Id);
             }

@@ -10,6 +10,7 @@ namespace Tasogarewa.Application.CQRS.Comments.Queries.GetComments
     public class GetCommentsQuery:IRequest<CommentListVm>
     {
        
+
         public Guid CourseId { get; set; }
     }
 }

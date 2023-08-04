@@ -11,6 +11,7 @@ using Tasogarewa.Persistance;
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddControllers();
         builder.Services.AddAutoMapper(opt =>
         {
             opt.AddProfile(new AssemblyMappingProfile(typeof(ITasogarewaDbContext).Assembly));
@@ -25,6 +26,7 @@ using Tasogarewa.Persistance;
         }
         catch (Exception ex)
         {
+   
 
         }
         builder.Services.AddApplication();
@@ -36,7 +38,6 @@ policy.AllowAnyHeader();
 policy.AllowAnyMethod();
 policy.AllowAnyOrigin();
 }));
-
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
         {

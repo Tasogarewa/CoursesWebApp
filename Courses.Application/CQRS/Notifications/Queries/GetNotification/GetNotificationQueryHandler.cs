@@ -26,7 +26,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Queries.GetNotification
         public async Task<NotificationVm> Handle(GetNotificationQuery request, CancellationToken cancellationToken)
         {
             var Notification = await NotificationsRepository.GetAsync(request.Id);
-            if (Notification == null)
+            if (Notification == null||request.UserId==null)
             {
                 throw new NotFoundException(nameof(Notification), request.Id);
             }

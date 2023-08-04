@@ -23,7 +23,7 @@ namespace Tasogarewa.Application.CQRS.Images.Commands.UpdateImage
         public async Task<Guid> Handle(UpdateImageCommand request, CancellationToken cancellationToken)
         {
             var Image = await ImagesRepository.GetAsync(request.Id);
-            if (Image == null || Image.Id != request.Id)
+            if (Image == null || Image.Id != request.Id||Image.appUser.Id!=request.UserId)
             {
                 throw new NotFoundException(nameof(Image), request.Id);
             }

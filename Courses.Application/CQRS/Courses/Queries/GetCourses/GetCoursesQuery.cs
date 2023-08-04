@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {
-    public class GetCoursesQuery:IRequest<CourseListVm>
+    public class GetCoursesQuery:IRequest<ChatListVm>
     {
        
     }

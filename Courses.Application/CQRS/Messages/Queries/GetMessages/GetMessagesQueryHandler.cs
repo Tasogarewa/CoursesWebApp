@@ -31,7 +31,7 @@ namespace Tasogarewa.Application.CQRS.Messages.Queries.GetMessages
                 throw new NotFoundException(nameof(messages), 0);
             }
             else
-                return new MessagesListVm() { MessagesList = await Mapper.ProjectTo<MessagesDto>((IQueryable)messages).ToListAsync() };
+                return new MessagesListVm() { MessagesList = await Mapper.ProjectTo<MessagesDto>((IQueryable)messages).Where(x=>x.Chat.Id==request.ChatId).ToListAsync() };
         }
     }
 }
