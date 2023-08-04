@@ -10,6 +10,7 @@ namespace Tasogarewa.Application.CQRS.Chats.Queries.GetChat
 {
     public class GetChatQuery:IRequest<ChatVm>
     {
+        public Guid UserId { get; set; }
         public Guid Id  { get; set;}
     }
 }

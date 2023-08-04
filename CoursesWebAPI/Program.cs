@@ -1,3 +1,6 @@
+
+using CoursesWebAPI.Middleware;
+
 using System.Reflection;
 using Tasogarewa.Application;
 using Tasogarewa.Application.Common.Mapping;
@@ -11,6 +14,9 @@ using Tasogarewa.Persistance;
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddControllers();
+
         builder.Services.AddAutoMapper(opt =>
         {
             opt.AddProfile(new AssemblyMappingProfile(typeof(ITasogarewaDbContext).Assembly));
@@ -25,6 +31,7 @@ using Tasogarewa.Persistance;
         }
         catch (Exception ex)
         {
+
 
         }
         builder.Services.AddApplication();
@@ -47,6 +54,9 @@ policy.AllowAnyOrigin();
         app.UseHttpsRedirection();
 app.UseEndpoints(endpoints =>
 endpoints.MapControllers());
+
+app.UseCustomExceptionHandler();
+
         app.UseAuthorization();
         app.MapControllers();
         app.Run();

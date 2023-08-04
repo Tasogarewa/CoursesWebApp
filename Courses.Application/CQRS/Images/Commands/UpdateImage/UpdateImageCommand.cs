@@ -9,6 +9,7 @@ namespace Tasogarewa.Application.CQRS.Images.Commands.UpdateImage
 {
     public class UpdateImageCommand:IRequest<Guid>
     {
+        public Guid UserId { get; set; }
         public Guid Id { get; set; }
         public string Path { get; set; }
     }

@@ -9,6 +9,7 @@ namespace Tasogarewa.Application.CQRS.Images.Commands.DeleteImage
 {
     public class DeleteImageCommand:IRequest<Unit>
     {
+        public Guid UserId { get; set; }
         public Guid Id { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using Tasogarewa.Application.CQRS.Comments.Queries.GetComments;
 
 namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {
-    public class CourseListVm
+    public class ChatListVm
     {
         public List<CourseDto> CoursesList { get; set; }
     }

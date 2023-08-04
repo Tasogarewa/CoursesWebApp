@@ -20,7 +20,9 @@ namespace Tasogarewa.Application.CQRS.Chats.Commands.CreateChat
 
         public async Task<Guid> Handle(CreateChatCommand request, CancellationToken cancellationToken)
         {
-           var chat = await ChatRepository.Create(new Chat() { Id = request.Id, AppUsers = request.Users});
+            var chat = await ChatRepository.Create(new Chat() { AppUsers = request.Users });
+           
+         
             return chat.Id;
          
         }

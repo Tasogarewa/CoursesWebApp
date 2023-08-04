@@ -12,7 +12,6 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.CreateCourse
     public class CreateCourseCommand:IRequest<Guid>
     {
         public Guid UserId { get; set; }
-        public Guid Id { get; set; }
         public decimal Price { get; set; }
         public string Name { get; set; }
         public DateTime Expires { get; set; }

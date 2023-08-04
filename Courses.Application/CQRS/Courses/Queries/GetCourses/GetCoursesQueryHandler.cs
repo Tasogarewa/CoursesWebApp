@@ -13,7 +13,7 @@ using Tasogarewa.Application.Interfaces;
 
 namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {
-    public class GetCoursesQueryHandler : IRequestHandler<GetCoursesQuery, CourseListVm>
+    public class GetCoursesQueryHandler : IRequestHandler<GetCoursesQuery, ChatListVm>
     {
         private readonly IMapper Mapper;
         private readonly IRepository<Course> CoursesRepository;
@@ -23,15 +23,15 @@ namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
             Mapper = mapper;
         }
 
-        public async Task<CourseListVm> Handle(GetCoursesQuery request, CancellationToken cancellationToken)
+        public async Task<ChatListVm> Handle(GetCoursesQuery request, CancellationToken cancellationToken)
         {
             var courses = await CoursesRepository.GetAllAsync();
-            if (courses == null)
+            if (courses == null||request.UserId==Guid.Empty)
             {
                 throw new NotFoundException(nameof(courses), 0);
             }
             else
-                return new CourseListVm() { CoursesList = await Mapper.ProjectTo<CourseDto>((IQueryable)courses).ToListAsync() };
+                return new ChatListVm() { CoursesList = await Mapper.ProjectTo<CourseDto>((IQueryable)courses).ToListAsync() };
         }
     }
 }

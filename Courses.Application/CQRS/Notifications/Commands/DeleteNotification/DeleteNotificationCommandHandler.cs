@@ -25,7 +25,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Commands.DeleteNotification
         public async Task<Unit> Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
         {
             var Notification = await NotificationsRepository.GetAsync(request.Id);
-            if (Notification == null || Notification.Id != request.Id)
+            if (Notification == null || Notification.Id != request.Id||Notification.appUser.Id!=request.UserId)
             {
                 throw new NotFoundException(nameof(Notification), request.Id);
             }

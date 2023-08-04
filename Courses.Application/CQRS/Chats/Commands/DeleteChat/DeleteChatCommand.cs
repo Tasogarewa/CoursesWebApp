@@ -9,6 +9,7 @@ namespace Tasogarewa.Application.CQRS.Chats.Commands.DeleteChat
 {
     public class DeleteChatCommand:IRequest<Unit>
     {
+        public Guid UserId { get; set; }
         public Guid Id { get; set; }
        
     }

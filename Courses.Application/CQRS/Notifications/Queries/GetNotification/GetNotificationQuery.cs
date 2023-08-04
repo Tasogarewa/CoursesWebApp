@@ -9,6 +9,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Queries.GetNotification
 {
     public class GetNotificationQuery:IRequest<NotificationVm>
     {
+        public Guid UserId { get; set; }
         public Guid Id { get; set; }
         
     }

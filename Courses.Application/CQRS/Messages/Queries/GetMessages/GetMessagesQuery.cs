@@ -9,5 +9,6 @@ namespace Tasogarewa.Application.CQRS.Messages.Queries.GetMessages
 {
     public class GetMessagesQuery:IRequest<MessagesListVm>
     {
+        public Guid ChatId { get; set; }
     }
 }

@@ -17,12 +17,11 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.UpdateCourse
         public UpdateCourseCommandHandler(Repository<Course> repository)
         {
             CoursesRepository = repository;
-
         }
         public async Task<Guid> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
         {
             var course = await CoursesRepository.GetAsync(request.Id);
-            if (course == null || course.Id != request.Id)
+            if (course == null || course.Id != request.Id||course.appUser.Id!=request.UserId)
             {
                 throw new NotFoundException(nameof(course), request.Id);
             }
