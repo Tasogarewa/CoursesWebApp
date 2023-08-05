@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using Tasogarewa.Domain;
 
 namespace Courses.Domain
 {
@@ -15,8 +16,8 @@ namespace Courses.Domain
         public DateTime Update { get; set; }
         [MaxLength(1000)]
         public string Text { get; set; } 
-        public  virtual AppUser appUser { get; set; }
         public virtual Course Course { get; set; }
+        public  virtual AppUser appUser { get; set; }
         public string Replay { get; set; }
         public int Rating { get; set; }
 

@@ -3,6 +3,7 @@ using Courses.Domain;
 using Tasogarewa.Application.Common.Mapping;
 using Tasogarewa.Application.CQRS.Chats.Commands.CreateChat;
 using Tasogarewa.Application.CQRS.Images.Commands.CreateImage;
+using Tasogarewa.Domain;
 
 namespace CoursesWebAPI.Models
 {

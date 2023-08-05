@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tasogarewa.Application.Common;
 using Tasogarewa.Application.Interfaces;
+using Tasogarewa.Domain;
 
 namespace Tasogarewa.Application.CQRS.Images.Commands.CreateImage
 {
@@ -16,7 +17,7 @@ namespace Tasogarewa.Application.CQRS.Images.Commands.CreateImage
         private readonly IRepository<Course> CoursesRepository;
         private readonly IRepository<AppUser> UsersRepository;
 
-        public CreateImageCommandHandler(Repository<Image> repository,Repository<Course> repository1, Repository<AppUser> repository2)
+        public CreateImageCommandHandler(IRepository<Image> repository,IRepository<Course> repository1, IRepository<AppUser> repository2)
         {
             ImagesRepository = repository;
             CoursesRepository = repository1;

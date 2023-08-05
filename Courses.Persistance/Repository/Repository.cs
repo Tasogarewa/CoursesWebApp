@@ -6,15 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Tasogarewa.Application.Interfaces;
 
-namespace Tasogarewa.Application.Common
+namespace Tasogarewa.Persistance.Common
 {
     public class Repository<T> : IRepository<T> where T : class
     {
 
         private readonly DbSet<T> _dbSet;
         private readonly DbContext _dbContext;
-        public Repository() { }
-        public Repository(DbContext Context)
+        public Repository(TasogarewaDbContext Context)
         {
             _dbContext = Context;
             _dbSet = _dbContext.Set<T>();
@@ -22,7 +21,7 @@ namespace Tasogarewa.Application.Common
         }
         public async Task<T> Create(T entity)
         {
-             _dbSet.AddAsync(entity);
+             await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return  entity;
 

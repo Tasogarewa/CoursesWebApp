@@ -19,7 +19,7 @@ namespace Tasogarewa.Application.CQRS.Comments.Queries.GetComments
         private readonly IMapper Mapper;
         private readonly IRepository<Comment> CommentRepository;
 
-        public GetCommentsQueryHandler(IMapper mapper,Repository<Comment> repository)
+        public GetCommentsQueryHandler(IMapper mapper,  IRepository<Comment> repository)
         {
             Mapper = mapper;
             CommentRepository = repository;

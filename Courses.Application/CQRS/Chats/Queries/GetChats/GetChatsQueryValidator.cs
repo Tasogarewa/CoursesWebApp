@@ -9,7 +9,7 @@ namespace Tasogarewa.Application.CQRS.Chats.Queries.GetChats
 {
     public class GetChatsQueryValidator:AbstractValidator<GetChatsQuery>
     {
-        GetChatsQueryValidator()
+       public GetChatsQueryValidator()
         {
             RuleFor(chat => chat.UserId).NotEqual(Guid.Empty);
         }

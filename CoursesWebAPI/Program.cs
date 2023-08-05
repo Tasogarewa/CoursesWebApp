@@ -1,22 +1,20 @@
 
 using CoursesWebAPI.Middleware;
-
+using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
 using System.Reflection;
 using Tasogarewa.Application;
+using Tasogarewa.Application.Common.Behaviors;
 using Tasogarewa.Application.Common.Mapping;
 using Tasogarewa.Application.Interfaces;
 using Tasogarewa.Persistance;
 
-
-
-
-        var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-
         builder.Services.AddControllers();
-
         builder.Services.AddAutoMapper(opt =>
         {
             opt.AddProfile(new AssemblyMappingProfile(typeof(ITasogarewaDbContext).Assembly));
@@ -27,15 +25,12 @@ using Tasogarewa.Persistance;
         try
         {
             var context = ServiceProvider.GetRequiredService<TasogarewaDbContext>();
-
         }
         catch (Exception ex)
         {
-
-
         }
-        builder.Services.AddApplication();
-        builder.Services.AddPersistance(builder.Configuration);
+builder.Services.AddApplication();
+builder.Services.AddPersistance(builder.Configuration);
 builder.Services.AddCors(opt =>
 opt.AddPolicy("AllowAll", policy =>
 {
@@ -52,12 +47,15 @@ policy.AllowAnyOrigin();
         }
         app.UseCors("AllowAll");
         app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 endpoints.MapControllers());
 
+
 app.UseCustomExceptionHandler();
 
-        app.UseAuthorization();
+
         app.MapControllers();
         app.Run();
 

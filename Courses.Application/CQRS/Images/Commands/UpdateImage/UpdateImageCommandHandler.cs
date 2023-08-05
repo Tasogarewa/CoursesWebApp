@@ -15,7 +15,7 @@ namespace Tasogarewa.Application.CQRS.Images.Commands.UpdateImage
     public class UpdateImageCommandHandler : IRequestHandler<UpdateImageCommand, Guid>
     {
         private readonly IRepository<Image> ImagesRepository;
-        public UpdateImageCommandHandler(Repository<Image> repository)
+        public UpdateImageCommandHandler(IRepository<Image> repository)
         {
             ImagesRepository = repository;
 

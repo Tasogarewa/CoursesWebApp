@@ -18,7 +18,7 @@ namespace Tasogarewa.Application.CQRS.Chats.Queries.GetChat
         private readonly IRepository<Chat> ChatRepository;
         private readonly IMapper Mapper;
 
-        public GetChatQueryHandler(IMapper mapper,Repository<Chat> repository)
+        public GetChatQueryHandler(IMapper mapper,IRepository<Chat> repository)
         {
             ChatRepository = repository;
             Mapper = mapper;

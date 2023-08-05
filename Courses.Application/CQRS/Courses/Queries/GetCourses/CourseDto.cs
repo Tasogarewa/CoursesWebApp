@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tasogarewa.Application.Common.Mapping;
 using Tasogarewa.Application.CQRS.Courses.Queries.GetCourse;
+using Tasogarewa.Domain;
 
 namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {

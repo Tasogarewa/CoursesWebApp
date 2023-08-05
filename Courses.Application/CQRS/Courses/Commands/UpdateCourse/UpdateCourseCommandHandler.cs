@@ -14,7 +14,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.UpdateCourse
     public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, Guid>
     {
         private readonly IRepository<Course> CoursesRepository;
-        public UpdateCourseCommandHandler(Repository<Course> repository)
+        public UpdateCourseCommandHandler(IRepository<Course> repository)
         {
             CoursesRepository = repository;
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Tasogarewa.Application.Common.Mapping;
 using Tasogarewa.Application.CQRS.Chats.Commands.CreateChat;
+using Tasogarewa.Domain;
 
 namespace CoursesWebAPI.Models
 {

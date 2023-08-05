@@ -16,7 +16,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.DeleteCourse
         private readonly IRepository<Course> CoursesRepository;
 
 
-        public DeleteCourseCommandHandler(Repository<Course> repository)
+        public DeleteCourseCommandHandler(IRepository<Course> repository)
         {
             CoursesRepository = repository;
 
