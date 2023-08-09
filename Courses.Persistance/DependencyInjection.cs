@@ -21,9 +21,11 @@ namespace Tasogarewa.Persistance
         public static IServiceCollection AddPersistance(this IServiceCollection services,IConfiguration configuration) 
         {
             var connectionString = configuration.GetConnectionString("DbConnection");
-            services.AddDbContext<ITasogarewaDbContext,TasogarewaDbContext>(options =>
-            options.UseSqlServer(connectionString,b=>b.MigrationsAssembly("CoursesWebAPI")).UseLazyLoadingProxies()
-            );
+            services.AddDbContext<ITasogarewaDbContext, TasogarewaDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString, b => b.MigrationsAssembly("CoursesWebAPI")).UseLazyLoadingProxies();
+            
+            });
             services.AddScoped<IRepository<Course>, Repository<Course>>();
             services.AddScoped<IRepository<Image>, Repository<Image>>();
             services.AddScoped<IRepository<Notification>, Repository<Notification>>();

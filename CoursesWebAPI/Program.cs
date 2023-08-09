@@ -3,6 +3,7 @@ using CoursesWebAPI.Middleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using Tasogarewa.Application;
 using Tasogarewa.Application.Common.Behaviors;
@@ -12,8 +13,19 @@ using Tasogarewa.Persistance;
 
 var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
+        builder.Services.AddAuthentication("Bearer")
+           .AddJwtBearer("Bearer", options =>
+           {
+               options.Authority = "https://localhost:5001";
+
+               options.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateAudience = false
+               };
+           });
+    
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerDocument();
         builder.Services.AddControllers();
         builder.Services.AddAutoMapper(opt =>
         {
@@ -25,6 +37,7 @@ var builder = WebApplication.CreateBuilder(args);
         try
         {
             var context = ServiceProvider.GetRequiredService<TasogarewaDbContext>();
+    await context.Database.EnsureCreatedAsync();
         }
         catch (Exception ex)
         {
@@ -42,13 +55,17 @@ policy.AllowAnyOrigin();
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+              app.UseOpenApi();   
+             app.UseSwagger();
+            app.UseSwaggerUi3();
         }
         app.UseCors("AllowAll");
         app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseEndpoints(endpoints =>
 endpoints.MapControllers());
 
