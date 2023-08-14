@@ -4,6 +4,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Tasogarewa.Application;
 using Tasogarewa.Application.Common.Behaviors;
@@ -23,10 +24,22 @@ var builder = WebApplication.CreateBuilder(args);
                    ValidateAudience = false
                };
            });
-    
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerDocument();
-        builder.Services.AddControllers();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ApiScope", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "Tasogarewa.Api");
+    });
+});
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerDocument(x =>
+{
+});
+
+
+
+builder.Services.AddControllers();
         builder.Services.AddAutoMapper(opt =>
         {
             opt.AddProfile(new AssemblyMappingProfile(typeof(ITasogarewaDbContext).Assembly));
@@ -67,7 +80,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
-endpoints.MapControllers());
+{
+    endpoints.MapControllers()
+        .RequireAuthorization("ApiScope");
+});
 
 
 app.UseCustomExceptionHandler();
