@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
+
 namespace CoursesWebAPI.Controllers
 {
 
@@ -13,6 +14,6 @@ namespace CoursesWebAPI.Controllers
         protected IMediator mediator => Mediator ??= HttpContext.RequestServices.GetService<IMediator>();
         internal Guid UserId => !User.Identity.IsAuthenticated
                 ? Guid.Empty
-                : Guid.Parse(AppUser.FindFirst(ClaimTypes.NameIdentifier).Value);
+                : Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
     }
 }

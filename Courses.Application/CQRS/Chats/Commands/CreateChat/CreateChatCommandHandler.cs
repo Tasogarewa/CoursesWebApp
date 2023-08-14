@@ -13,7 +13,7 @@ namespace Tasogarewa.Application.CQRS.Chats.Commands.CreateChat
     public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Guid>
     {
         private readonly IRepository<Chat> ChatRepository;
-        public CreateChatCommandHandler(Repository<Chat> repository)
+        public CreateChatCommandHandler(IRepository<Chat> repository)
         {
             ChatRepository = repository;
         }

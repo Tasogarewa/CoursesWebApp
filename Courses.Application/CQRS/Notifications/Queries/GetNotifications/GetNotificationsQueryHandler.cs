@@ -18,7 +18,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Queries.GetNotifications
     {
         private readonly IMapper Mapper;
         private readonly IRepository<Notification> NotificationsRepository;
-        public GetNotificationsQueryHandler(Repository<Notification> repository, IMapper mapper)
+        public GetNotificationsQueryHandler(IRepository<Notification> repository, IMapper mapper)
         {
             NotificationsRepository = repository;
             Mapper = mapper;
@@ -32,7 +32,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Queries.GetNotifications
                 throw new NotFoundException(nameof(Notifications), request.UserId);
             }
             else
-                return new NotificationListVm() { NotificationsList = await Mapper.ProjectTo<NotificationDto>(Notifications.Where(x => x.appUser.Id == request.UserId)).ToListAsync() };
+                return new NotificationListVm() { NotificationsList = await Mapper.ProjectTo<NotificationDto>((IQueryable)Notifications.Where(x => x.appUser.Id == request.UserId)).ToListAsync() };
         }
     }
 }

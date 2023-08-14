@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tasogarewa.Application.Common;
 using Tasogarewa.Application.Interfaces;
+using Tasogarewa.Domain;
 
 namespace Tasogarewa.Application.CQRS.Courses.Commands.CreateCourse
 {
@@ -15,7 +16,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.CreateCourse
         private readonly IRepository<Course> CoursesRepository;
         private readonly IRepository<AppUser> AppUserRepository;
 
-        public CreateCourseCommandHandler(Repository<Course> repository, Repository<AppUser> repositoryUser)
+        public CreateCourseCommandHandler(IRepository<Course> repository, IRepository<AppUser> repositoryUser)
         {
             CoursesRepository = repository;
             AppUserRepository = repositoryUser;
@@ -23,7 +24,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.CreateCourse
 
         public async Task<Guid> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
-            var course = await CoursesRepository.Create(new Course { Rating = 0, appUser = AppUserRepository.GetAsync(request.UserId), Expires = request.Expires, Description = request.Description, CreateAt = DateTime.Now, Images = request.Images, Name = request.Name, FilePath = request.FilePath, Price = request.Price });
+            var course = await CoursesRepository.Create(new Course { Rating = 0, appUser = await AppUserRepository.GetAsync(request.UserId), Expires = request.Expires, Description = request.Description, CreateAt = DateTime.Now, Images = request.Images, Name = request.Name, FilePath = request.FilePath, Price = request.Price });
             return course.Id;
         }
     }

@@ -20,7 +20,7 @@ namespace CoursesWebAPI.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, exception);
+                await HandleExceptionAsync(context, ex);
             }
          
         }

@@ -17,7 +17,7 @@ namespace Tasogarewa.Application.CQRS.Images.Commands.DeleteImage
         private readonly IRepository<Image> ImagesRepository;
 
 
-        public DeleteImageCommandHandler(Repository<Image> repository)
+        public DeleteImageCommandHandler(IRepository<Image> repository)
         {
             ImagesRepository = repository;
 

@@ -18,7 +18,7 @@ namespace Tasogarewa.Application.CQRS.Messages.Queries.GetMessages
     {
         private readonly IMapper Mapper;
         private readonly IRepository<Message> MessagesRepository;
-        public GetMessagesQueryHandler(Repository<Message> repositoryMessages, IMapper mapper)
+        public GetMessagesQueryHandler(IRepository<Message> repositoryMessages, IMapper mapper)
         {
             MessagesRepository = repositoryMessages;
             Mapper = mapper;

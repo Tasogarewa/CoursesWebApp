@@ -17,7 +17,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Queries.GetNotification
     {
         private readonly IMapper Mapper;
         private readonly IRepository<Notification> NotificationsRepository;
-        public GetNotificationQueryHandler(Repository<Notification> repository, IMapper mapper)
+        public GetNotificationQueryHandler(IRepository<Notification> repository, IMapper mapper)
         {
             NotificationsRepository = repository;
             Mapper = mapper;
@@ -26,7 +26,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Queries.GetNotification
         public async Task<NotificationVm> Handle(GetNotificationQuery request, CancellationToken cancellationToken)
         {
             var Notification = await NotificationsRepository.GetAsync(request.Id);
-            if (Notification == null||request.UserId==null)
+            if (Notification == null||request.UserId==Guid.Empty)
             {
                 throw new NotFoundException(nameof(Notification), request.Id);
             }

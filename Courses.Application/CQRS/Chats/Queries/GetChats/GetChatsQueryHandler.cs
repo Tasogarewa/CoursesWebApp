@@ -20,7 +20,7 @@ namespace Tasogarewa.Application.CQRS.Chats.Queries.GetChats
         private readonly IRepository<Chat> ChatsRepository;
         private readonly IMapper Mapper;
 
-        public GetChatsQueryHandler(IMapper mapper,Repository<Chat> repository)
+        public GetChatsQueryHandler(IMapper mapper,IRepository<Chat> repository)
         {
             ChatsRepository = repository;
             Mapper = mapper;
@@ -33,7 +33,7 @@ namespace Tasogarewa.Application.CQRS.Chats.Queries.GetChats
             {
                 throw new NotFoundException(nameof(chats), request.UserId);
             }
-            return new ChatsListVm { ChatsList = await Mapper.ProjectTo<ChatsDto>((IQueryable)chats.Where(x=>x.AppUsers.FirstOrDefault(x=>x.Id==request.UserId)).ToListAsync())};
+            return new ChatsListVm { ChatsList = await Mapper.ProjectTo<ChatsDto>((IQueryable) chats.Where(x=>x.AppUsers.FirstOrDefault(x=>x.Id==request.UserId).Id==request.UserId)).ToListAsync()};
         }
 
     }

@@ -16,7 +16,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourse
     {
         private readonly IMapper Mapper;
         private readonly IRepository<Course> CoursesRepository;
-        public GetCourseQueryHandler(Repository<Course> repository,IMapper mapper)
+        public GetCourseQueryHandler(IRepository<Course> repository,IMapper mapper)
         {
             CoursesRepository = repository;
             Mapper = mapper;

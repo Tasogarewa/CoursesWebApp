@@ -18,7 +18,7 @@ namespace Tasogarewa.Application.CQRS.Images.Queries.GetImages
     {
         private readonly IMapper Mapper;
         private readonly IRepository<Image> ImagesRepository;
-        public GetImagesQueryHandler(Repository<Image> repository, IMapper mapper)
+        public GetImagesQueryHandler(IRepository<Image> repository, IMapper mapper)
         {
             ImagesRepository = repository;
             Mapper = mapper;

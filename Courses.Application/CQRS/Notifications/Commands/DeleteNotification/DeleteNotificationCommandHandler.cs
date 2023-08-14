@@ -17,7 +17,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Commands.DeleteNotification
         private readonly IRepository<Notification> NotificationsRepository;
 
 
-        public DeleteNotificationCommandHandler(Repository<Notification> repository)
+        public DeleteNotificationCommandHandler(IRepository<Notification> repository)
         {
             NotificationsRepository = repository;
 
