@@ -14,23 +14,22 @@ namespace Tasogarewa.Application.CQRS.Notifications.Commands.DeleteNotification
 {
     public class DeleteNotificationCommandHandler : IRequestHandler<DeleteNotificationCommand, Unit>
     {
-        private readonly IRepository<Notification> NotificationsRepository;
+        private readonly IRepository<Notification> _notificationsRepository;
 
-
-        public DeleteNotificationCommandHandler(IRepository<Notification> repository)
+        public DeleteNotificationCommandHandler(IRepository<Notification> notificationsRepository)
         {
-            NotificationsRepository = repository;
-
+            _notificationsRepository = notificationsRepository;
         }
+
         public async Task<Unit> Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
         {
-            var Notification = await NotificationsRepository.GetAsync(request.Id);
-            if (Notification == null || Notification.Id != request.Id||Notification.appUser.Id!=request.UserId)
+            var notification = await _notificationsRepository.GetAsync(request.Id);
+            if (notification == null || notification.Id != request.Id||request.UserId!=Guid.Empty)
             {
                 throw new NotFoundException(nameof(Notification), request.Id);
             }
             else
-                NotificationsRepository.Delete(Notification);
+               await _notificationsRepository.Delete(notification);
             return Unit.Value;
         }
     }

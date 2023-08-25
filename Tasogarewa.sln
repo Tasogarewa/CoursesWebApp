@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD363C90-FB22-41D8-B42E-CAE00EE62B11}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastracture", "Infrastracture", "{266D8FBC-E27E-47BD-9FCD-418CBE38568B}"
+	ProjectSection(SolutionItems) = preProject
+		Tasogarewa.IdentityServer\Program.cs = Tasogarewa.IdentityServer\Program.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{7C2A577A-AB4C-4CC6-9CC0-3EB5A9711E41}"
 EndProject

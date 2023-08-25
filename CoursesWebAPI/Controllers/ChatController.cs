@@ -1,57 +1,55 @@
-﻿using AutoMapper;
-using CoursesWebAPI.Models;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Tasogarewa.Application.CQRS.Chats.Commands.CreateChat;
-using Tasogarewa.Application.CQRS.Chats.Queries.GetChat;
-using Tasogarewa.Application.CQRS.Chats.Queries.GetChats;
-using Tasogarewa.Application.CQRS.Courses.Commands.CreateCourse;
-using Tasogarewa.Application.CQRS.Courses.Commands.DeleteCourse;
-using Tasogarewa.Application.CQRS.Courses.Queries.GetCourse;
-using Tasogarewa.Application.CQRS.Courses.Queries.GetCourses;
+using Tasogarewa.Application.CQRS.UserChats.Commands.CreateChat;
+using Tasogarewa.Application.CQRS.UserChats.Commands.DeleteChat;
+using Tasogarewa.Application.CQRS.UserChats.Commands.UpdateChat;
+using Tasogarewa.Application.CQRS.UserChats.Queries.GetChat;
+using Tasogarewa.Application.CQRS.UserChats.Queries.GetChats;
 
 namespace CoursesWebAPI.Controllers
 {
-    [Route("api/[controller]")]
     public class ChatController:BaseController
     {
-        private readonly IMapper Mapper;
-        public ChatController(IMapper mapper) => Mapper = mapper;
         [HttpGet]
-        public async Task<ActionResult<ChatListVm>> GetAll()
-        {
-            var query = new GetChatsQuery
-            {
-                UserId = UserId
-            };
-
-            var vm = await mediator.Send(query);
-            return Ok(vm);
-
-        }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ChatVm>> Get(Guid id)
+        public async Task<ActionResult<ChatVm>> Get(Guid chatId)
         {
             var query = new GetChatQuery
             {
-                Id = id
+                 Id = chatId
             };
-            var vm = await mediator.Send(query);
+            var vm = await Mediator.Send(query);
+            return Ok(vm);
+        }
+        [HttpGet]
+        public async Task<ActionResult<ChatListVm>> GetAll(Guid userId)
+        {
+            var query = new GetChatsQuery
+            {
+                UserId = userId
+            };
+            var vm = await Mediator.Send(query);
             return Ok(vm);
         }
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateChatDto createChatDto)
+        public async Task<ActionResult<Guid>> Create([FromBody] CreateChatCommand createChatCommand)
         {
-            var command = Mapper.Map<CreateChatCommand>(createChatDto);
-            command.Users = createChatDto.AppUsers;
-            var ChatId = await mediator.Send(command);
-            return Ok(ChatId);
+            var chatId = await Mediator.Send(createChatCommand);
+            return Ok(chatId);
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult<Unit>> Delete(Guid id)
         {
-            var command = new DeleteCourseCommand
-            { Id = id, UserId = UserId};
-            await mediator.Send(command);
+            var command = new DeleteChatCommand
+            {
+                Id = id
+            };
+            await Mediator.Send(command);
+            return NoContent();
+        }
+        [HttpPut]
+        public async Task<ActionResult<Guid>> Update([FromBody] UpdateChatCommand  updateChatCommand)
+        {
+            await Mediator.Send(updateChatCommand);
             return NoContent();
         }
     }

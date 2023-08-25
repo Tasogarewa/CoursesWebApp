@@ -13,25 +13,26 @@ using Tasogarewa.Application.Interfaces;
 
 namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {
-    public class GetCoursesQueryHandler : IRequestHandler<GetCoursesQuery, ChatListVm>
+    public class GetCoursesQueryHandler : IRequestHandler<GetCoursesQuery, CourseListVm>
     {
-        private readonly IMapper Mapper;
-        private readonly IRepository<Course> CoursesRepository;
-        public GetCoursesQueryHandler(IRepository<Course> repository, IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly IRepository<Course> _courseRepository;
+
+        public GetCoursesQueryHandler(IMapper mapper, IRepository<Course> courseRepository)
         {
-            CoursesRepository = repository;
-            Mapper = mapper;
+            _mapper = mapper;
+            _courseRepository = courseRepository;
         }
 
-        public async Task<ChatListVm> Handle(GetCoursesQuery request, CancellationToken cancellationToken)
+        public async Task<CourseListVm> Handle(GetCoursesQuery request, CancellationToken cancellationToken)
         {
-            var courses = await CoursesRepository.GetAllAsync();
+            var courses = await _courseRepository.GetAllAsync();
             if (courses == null||request.UserId==Guid.Empty)
             {
                 throw new NotFoundException(nameof(courses), 0);
             }
             else
-                return new ChatListVm() { CoursesList = await Mapper.ProjectTo<CourseDto>((IQueryable)courses).ToListAsync() };
+                return new CourseListVm() { CoursesList = await _mapper.ProjectTo<CourseDto>((IQueryable)courses).ToListAsync() };
         }
     }
 }

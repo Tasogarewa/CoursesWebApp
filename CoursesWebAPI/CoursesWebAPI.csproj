@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Courses.Persistance\Tasogarewa.Persistance.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Models\" />
+	</ItemGroup>
+
 </Project>

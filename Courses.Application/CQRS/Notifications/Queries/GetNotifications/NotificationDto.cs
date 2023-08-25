@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tasogarewa.Application.Common.Mapping;
-using Tasogarewa.Application.CQRS.Notifications.Queries.GetNotification;
 using Tasogarewa.Domain;
 
 namespace Tasogarewa.Application.CQRS.Notifications.Queries.GetNotifications
@@ -21,7 +20,7 @@ namespace Tasogarewa.Application.CQRS.Notifications.Queries.GetNotifications
         {
             profile.CreateMap<Notification, NotificationDto>().ForMember(x => x.Id, opt => opt.MapFrom(x => x.Id)).
                 ForMember(x => x.Text, opt => opt.MapFrom(x => x.Text)).
-                ForMember(x => x.Create, opt => opt.MapFrom(x => x.Create)).
+                ForMember(x => x.Create, opt => opt.MapFrom(x => x.CreateAt)).
                 ForMember(x => x.Image, opt => opt.MapFrom(x => x.Image));
         }
     }

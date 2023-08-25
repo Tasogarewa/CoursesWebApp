@@ -11,7 +11,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.DeleteCourse
     {
         public DeleteCourseCommandValidator() 
         {
-            RuleFor(course => course.UserId).NotEqual(Guid.Empty);
+  
             RuleFor(course => course.Id).NotEqual(Guid.Empty);
         }
     }

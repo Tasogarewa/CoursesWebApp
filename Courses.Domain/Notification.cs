@@ -11,8 +11,8 @@ namespace Tasogarewa.Domain
     {
         public Guid Id { get; set; }
         public string Text { get; set; }
-        public DateTime Create { get; set; }
+        public DateTime CreateAt { get; set; }
         public virtual Image Image { get;set;}
-        public virtual AppUser appUser { get; set; }
+
     }
 }

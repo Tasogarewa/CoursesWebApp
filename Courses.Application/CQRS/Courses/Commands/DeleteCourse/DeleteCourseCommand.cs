@@ -9,7 +9,6 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.DeleteCourse
 {
     public class DeleteCourseCommand:IRequest<Unit>
     {
-        public Guid UserId { get; set; }
         public Guid Id { get; set; }
     }
 }

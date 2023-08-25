@@ -28,10 +28,10 @@ namespace Tasogarewa.Persistance.Common
 
         }
 
-        public  void Delete(T entity)
+        public async Task  Delete(T entity)
         {
-           _dbSet.Remove(entity);
-           _dbContext.SaveChangesAsync();
+         _dbSet.Remove(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<T> GetAsync(Guid Id)
@@ -45,10 +45,10 @@ namespace Tasogarewa.Persistance.Common
         }
 
 
-        public  void Update(T entity)
+        public  async Task Update(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
        
     }

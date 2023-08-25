@@ -20,7 +20,7 @@ namespace Tasogarewa.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-
+            services.AddMediatR(cnfg=>cnfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>),
                 typeof(ValidationBehavior<,>));

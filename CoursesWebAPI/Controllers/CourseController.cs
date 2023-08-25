@@ -1,7 +1,4 @@
-﻿
-using AutoMapper;
-using CoursesWebAPI.Models;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tasogarewa.Application.CQRS.Courses.Commands.CreateCourse;
 using Tasogarewa.Application.CQRS.Courses.Commands.DeleteCourse;
@@ -9,57 +6,61 @@ using Tasogarewa.Application.CQRS.Courses.Commands.UpdateCourse;
 using Tasogarewa.Application.CQRS.Courses.Queries.GetCourse;
 using Tasogarewa.Application.CQRS.Courses.Queries.GetCourses;
 
+
+
 namespace CoursesWebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    public class CourseController : BaseController
+    public class CourseController:BaseController
     {
-        private readonly IMapper Mapper;
-        public CourseController(IMapper mapper)=>Mapper = mapper;
         [HttpGet]
-        public async Task<ActionResult<ChatListVm>> GetAll()
-        {
-            var query = new GetCoursesQuery
-            {
-                 UserId = UserId
-            };
-
-            var vm = await mediator.Send(query);
-            return Ok(vm);
-
-        }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CourseVm>> Get(Guid id)
+        public async Task<ActionResult<CourseVm>> Get(Guid courseId)
         {
             var query = new GetCourseQuery
             {
-                Id = id
+                Id = courseId
             };
-            var vm = await mediator.Send(query);
+            var vm = await Mediator.Send(query);
+            return Ok(vm);
+        }
+        [HttpGet]
+        public async Task<ActionResult<CourseListVm>> GetAllCMentorCourse(Guid mentorId)
+        {
+            var query = new GetMentorCoursesQuery
+            {
+                MentorId = mentorId
+            };
+            var vm = await Mediator.Send(query);
+            return Ok(vm);
+        }
+        [HttpGet]
+        public async Task<ActionResult<CourseListVm>> GetAll()
+        {
+            var query = new GetCoursesQuery
+            {
+            };
+            var vm = await Mediator.Send(query);
             return Ok(vm);
         }
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateCourseDto createCourseDto)
+        public async Task<ActionResult<Guid>> Create([FromBody] CreateCourseCommand createCourseCommand)
         {
-            var command = Mapper.Map<CreateCourseCommand>(createCourseDto);
-            command.UserId = UserId;
-            var CourseId = await mediator.Send(command);
-            return Ok(CourseId);
-        }
-        [HttpPut]
-        public async Task<ActionResult> Update([FromBody] UpdateCourseDto updateCourseDto)
-        {
-            var command = Mapper.Map<UpdateCourseCommand>(updateCourseDto);
-            command.UserId = UserId;
-            await mediator.Send(command);
-            return NoContent();
+            var courseId = await Mediator.Send(createCourseCommand);
+            return Ok(courseId);
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult<Unit>> Delete(Guid id)
         {
             var command = new DeleteCourseCommand
-            { Id = id ,UserId = UserId };
-            await mediator.Send(command);
+            {
+                Id = id
+            };
+            await Mediator.Send(command);
+            return NoContent();
+        }
+        [HttpPut]
+        public async Task<ActionResult<Guid>> Update([FromBody] UpdateCourseCommand  updateCourseCommand)
+        {
+            await Mediator.Send(updateCourseCommand);
             return NoContent();
         }
     }

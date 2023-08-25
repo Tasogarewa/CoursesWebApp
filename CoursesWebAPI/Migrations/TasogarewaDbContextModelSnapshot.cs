@@ -25,11 +25,45 @@ namespace CoursesWebAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AppUserChat", b =>
+                {
+                    b.Property<Guid>("ChatsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ChatsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("AppUserChat");
+                });
+
+            modelBuilder.Entity("AppUserCourseChat", b =>
+                {
+                    b.Property<Guid>("CourseChatsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CourseChatsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("AppUserCourseChat");
+                });
+
             modelBuilder.Entity("Courses.Domain.Chat", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -39,13 +73,20 @@ namespace CoursesWebAPI.Migrations
             modelBuilder.Entity("Courses.Domain.Comment", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AnnouncementId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Create")
+                    b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("MentorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
@@ -54,22 +95,31 @@ namespace CoursesWebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<DateTime>("Update")
+                    b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("appUserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AnnouncementId");
+
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("MentorId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -88,12 +138,18 @@ namespace CoursesWebAPI.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FilePath")
+                    b.Property<string>("Goals")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsChecked")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("MentorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MentorId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -106,15 +162,21 @@ namespace CoursesWebAPI.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<string>("Requierments")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("appUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Views")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("MentorId");
+
+                    b.HasIndex("MentorId1");
 
                     b.ToTable("Courses");
                 });
@@ -122,9 +184,19 @@ namespace CoursesWebAPI.Migrations
             modelBuilder.Entity("Courses.Domain.Image", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AnnouncementId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CodeExId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CourseChatId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CourseId")
@@ -134,21 +206,26 @@ namespace CoursesWebAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Path")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("appUserId")
+                    b.Property<Guid?>("ReviewId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AnnouncementId");
+
                     b.HasIndex("ChatId");
+
+                    b.HasIndex("CodeExId");
+
+                    b.HasIndex("CourseChatId");
 
                     b.HasIndex("CourseId");
 
                     b.HasIndex("MessageId");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("ReviewId");
 
                     b.ToTable("Images");
                 });
@@ -186,16 +263,16 @@ namespace CoursesWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AppUserId")
+                    b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ChatId")
+                    b.Property<Guid?>("CourseChatId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Replay")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Sended")
+                    b.Property<DateTime>("SendedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Text")
@@ -203,13 +280,52 @@ namespace CoursesWebAPI.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("AppUserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ChatId");
 
+                    b.HasIndex("CourseChatId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Announcement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MentorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("MentorId");
+
+                    b.ToTable("Announcements");
                 });
 
             modelBuilder.Entity("Tasogarewa.Domain.AppUser", b =>
@@ -218,79 +334,729 @@ namespace CoursesWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ChatId")
+                    b.Property<Guid>("ArchivedCourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BasketId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LikedCoursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MentorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserWishListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("ArchivedCourseId");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("LikedCoursesId");
+
+                    b.HasIndex("MentorId");
+
+                    b.HasIndex("UserWishListId");
 
                     b.ToTable("AppUsers");
                 });
 
+            modelBuilder.Entity("Tasogarewa.Domain.ArchivedCourse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ArchivedCoursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArchivedCoursesId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("ArchivedCourses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.ArchivedCourses", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArchivedCoursesLists");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Basket", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Baskets");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CodeEx", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Hint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("LectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Solution")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LectionId")
+                        .IsUnique();
+
+                    b.ToTable("CodeExes");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CourseChat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MentorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MentorId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId")
+                        .IsUnique();
+
+                    b.HasIndex("MentorId");
+
+                    b.HasIndex("MentorId1");
+
+                    b.ToTable("CourseChats");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CourseStudent", b =>
+                {
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CompletedLections")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Lections")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("MentorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CourseId", "UserId");
+
+                    b.HasIndex("MentorId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CourseStudents");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CourseTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Tag")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseTags");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.InBasketCourse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BasketId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("InBasketCourses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.InListCourse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserNamedListId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserNamedListId");
+
+                    b.ToTable("InListCourses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Lection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("Lections");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.LectionNotice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("From")
+                        .HasColumnType("time");
+
+                    b.Property<Guid>("LectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LectionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LectionNotices");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.LikedCourse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LikedCoursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("LikedCoursesId");
+
+                    b.ToTable("LikedCourses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.LikedCourses", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LikedCoursesLists");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Mentor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Facebook")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GitHub")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Instagram")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Twitter")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Web")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("YouTube")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Mentors");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MentorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("MentorId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CorrectAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FourthAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecondAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ThirdAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("MentorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RatingOfReview")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MentorId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Section", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Sections");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Test", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("LectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LectionId")
+                        .IsUnique();
+
+                    b.ToTable("Tests");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserNamedCourseList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserNamedCourseLists");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserNamedList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserNamedCourseListId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserNamedCourseListId");
+
+                    b.ToTable("UserNamedLists");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserWishList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserWishLists");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserWishedCourse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WishListId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("WishListId");
+
+                    b.ToTable("WishedCourses");
+                });
+
+            modelBuilder.Entity("AppUserChat", b =>
+                {
+                    b.HasOne("Courses.Domain.Chat", null)
+                        .WithMany()
+                        .HasForeignKey("ChatsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AppUserCourseChat", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.CourseChat", null)
+                        .WithMany()
+                        .HasForeignKey("CourseChatsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Courses.Domain.Comment", b =>
                 {
+                    b.HasOne("Tasogarewa.Domain.Announcement", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("AnnouncementId");
+
                     b.HasOne("Courses.Domain.Course", null)
                         .WithMany("Comments")
                         .HasForeignKey("CourseId");
 
-                    b.HasOne("Courses.Domain.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.HasOne("Tasogarewa.Domain.Mentor", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("MentorId");
 
-                    b.HasOne("Tasogarewa.Domain.AppUser", "appUser")
+                    b.HasOne("Tasogarewa.Domain.Review", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ReviewId");
+
+                    b.HasOne("Tasogarewa.Domain.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("appUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
-
-                    b.Navigation("appUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Courses.Domain.Course", b =>
                 {
-                    b.HasOne("Tasogarewa.Domain.AppUser", "appUser")
+                    b.HasOne("Tasogarewa.Domain.Mentor", "Mentor")
                         .WithMany()
-                        .HasForeignKey("appUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("MentorId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("appUser");
+                    b.HasOne("Tasogarewa.Domain.Mentor", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("MentorId1");
+
+                    b.Navigation("Mentor");
                 });
 
             modelBuilder.Entity("Courses.Domain.Image", b =>
                 {
+                    b.HasOne("Tasogarewa.Domain.Announcement", null)
+                        .WithMany("Images")
+                        .HasForeignKey("AnnouncementId");
+
                     b.HasOne("Courses.Domain.Chat", null)
                         .WithMany("Images")
                         .HasForeignKey("ChatId");
 
+                    b.HasOne("Tasogarewa.Domain.CodeEx", null)
+                        .WithMany("Images")
+                        .HasForeignKey("CodeExId");
+
+                    b.HasOne("Tasogarewa.Domain.CourseChat", null)
+                        .WithMany("Images")
+                        .HasForeignKey("CourseChatId");
+
                     b.HasOne("Courses.Domain.Course", null)
                         .WithMany("Images")
                         .HasForeignKey("CourseId");
-
-                    b.HasOne("Courses.Domain.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
 
                     b.HasOne("Courses.Domain.Message", null)
                         .WithMany("Images")
                         .HasForeignKey("MessageId");
 
-                    b.HasOne("Tasogarewa.Domain.AppUser", "appUser")
-                        .WithMany()
-                        .HasForeignKey("appUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("appUser");
+                    b.HasOne("Tasogarewa.Domain.Review", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ReviewId");
                 });
 
             modelBuilder.Entity("Courses.Domain.Mail", b =>
@@ -306,34 +1072,384 @@ namespace CoursesWebAPI.Migrations
 
             modelBuilder.Entity("Courses.Domain.Message", b =>
                 {
-                    b.HasOne("Tasogarewa.Domain.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Courses.Domain.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.HasOne("Tasogarewa.Domain.CourseChat", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("CourseChatId");
+
+                    b.HasOne("Tasogarewa.Domain.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Announcement", b =>
+                {
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithMany("Announcements")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.Mentor", "Mentor")
+                        .WithMany()
+                        .HasForeignKey("MentorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Mentor");
                 });
 
             modelBuilder.Entity("Tasogarewa.Domain.AppUser", b =>
                 {
-                    b.HasOne("Courses.Domain.Chat", null)
-                        .WithMany("AppUsers")
-                        .HasForeignKey("ChatId");
+                    b.HasOne("Tasogarewa.Domain.ArchivedCourses", "ArchivedCourse")
+                        .WithMany()
+                        .HasForeignKey("ArchivedCourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.Basket", "Basket")
+                        .WithMany()
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Courses.Domain.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.HasOne("Tasogarewa.Domain.LikedCourses", "LikedCourses")
+                        .WithMany()
+                        .HasForeignKey("LikedCoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.Mentor", "Mentor")
+                        .WithMany()
+                        .HasForeignKey("MentorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.UserWishList", "UserWishList")
+                        .WithMany()
+                        .HasForeignKey("UserWishListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ArchivedCourse");
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("LikedCourses");
+
+                    b.Navigation("Mentor");
+
+                    b.Navigation("UserWishList");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.ArchivedCourse", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.ArchivedCourses", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("ArchivedCoursesId");
+
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CodeEx", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.Lection", "Lection")
+                        .WithOne("CodeEx")
+                        .HasForeignKey("Tasogarewa.Domain.CodeEx", "LectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Lection");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CourseChat", b =>
+                {
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithOne("Chat")
+                        .HasForeignKey("Tasogarewa.Domain.CourseChat", "CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.Mentor", "Mentor")
+                        .WithMany()
+                        .HasForeignKey("MentorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.Mentor", null)
+                        .WithMany("CourseChats")
+                        .HasForeignKey("MentorId1");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Mentor");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CourseStudent", b =>
+                {
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithMany("CourseStudents")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.Mentor", null)
+                        .WithMany("Students")
+                        .HasForeignKey("MentorId");
+
+                    b.HasOne("Tasogarewa.Domain.Review", "Review")
+                        .WithMany()
+                        .HasForeignKey("ReviewId");
+
+                    b.HasOne("Tasogarewa.Domain.AppUser", "User")
+                        .WithMany("Courses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Review");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CourseTag", b =>
+                {
+                    b.HasOne("Courses.Domain.Course", null)
+                        .WithMany("CourseTags")
+                        .HasForeignKey("CourseId");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.InBasketCourse", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.Basket", "Basket")
+                        .WithMany("Courses")
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.InListCourse", b =>
+                {
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.UserNamedList", "UserNamedList")
+                        .WithMany("InListCourses")
+                        .HasForeignKey("UserNamedListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("UserNamedList");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Lection", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.Section", "Section")
+                        .WithMany("Lections")
+                        .HasForeignKey("SectionId");
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.LectionNotice", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.Lection", "Lection")
+                        .WithMany("LectionNotices")
+                        .HasForeignKey("LectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lection");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.LikedCourse", b =>
+                {
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.LikedCourses", "LikedCourses")
+                        .WithMany("Courses")
+                        .HasForeignKey("LikedCoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("LikedCourses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Mentor", b =>
+                {
+                    b.HasOne("Courses.Domain.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Notification", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.AppUser", null)
+                        .WithMany("Notifications")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("Courses.Domain.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.Mentor", null)
+                        .WithMany("Notifications")
+                        .HasForeignKey("MentorId");
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Question", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.Test", "Test")
+                        .WithMany("Questions")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Review", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.Mentor", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("MentorId");
+
+                    b.HasOne("Tasogarewa.Domain.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Section", b =>
+                {
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithMany("Sections")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Test", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.Lection", "Lection")
+                        .WithOne("Tests")
+                        .HasForeignKey("Tasogarewa.Domain.Test", "LectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Lection");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserNamedCourseList", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.AppUser", "User")
+                        .WithOne("UserNamedCourseList")
+                        .HasForeignKey("Tasogarewa.Domain.UserNamedCourseList", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserNamedList", b =>
+                {
+                    b.HasOne("Tasogarewa.Domain.UserNamedCourseList", "UserNamedCourseList")
+                        .WithMany("UserNamedLists")
+                        .HasForeignKey("UserNamedCourseListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserNamedCourseList");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserWishedCourse", b =>
+                {
+                    b.HasOne("Courses.Domain.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tasogarewa.Domain.UserWishList", "WishList")
+                        .WithMany("WishedCourses")
+                        .HasForeignKey("WishListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("WishList");
                 });
 
             modelBuilder.Entity("Courses.Domain.Chat", b =>
                 {
-                    b.Navigation("AppUsers");
-
                     b.Navigation("Images");
 
                     b.Navigation("Messages");
@@ -341,14 +1457,123 @@ namespace CoursesWebAPI.Migrations
 
             modelBuilder.Entity("Courses.Domain.Course", b =>
                 {
+                    b.Navigation("Announcements");
+
+                    b.Navigation("Chat");
+
                     b.Navigation("Comments");
 
+                    b.Navigation("CourseStudents");
+
+                    b.Navigation("CourseTags");
+
                     b.Navigation("Images");
+
+                    b.Navigation("Sections");
                 });
 
             modelBuilder.Entity("Courses.Domain.Message", b =>
                 {
                     b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Announcement", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.AppUser", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Notifications");
+
+                    b.Navigation("UserNamedCourseList");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.ArchivedCourses", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Basket", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CodeEx", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.CourseChat", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Lection", b =>
+                {
+                    b.Navigation("CodeEx");
+
+                    b.Navigation("LectionNotices");
+
+                    b.Navigation("Tests");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.LikedCourses", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Mentor", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("CourseChats");
+
+                    b.Navigation("Courses");
+
+                    b.Navigation("Notifications");
+
+                    b.Navigation("Reviews");
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Review", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Section", b =>
+                {
+                    b.Navigation("Lections");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.Test", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserNamedCourseList", b =>
+                {
+                    b.Navigation("UserNamedLists");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserNamedList", b =>
+                {
+                    b.Navigation("InListCourses");
+                });
+
+            modelBuilder.Entity("Tasogarewa.Domain.UserWishList", b =>
+                {
+                    b.Navigation("WishedCourses");
                 });
 #pragma warning restore 612, 618
         }

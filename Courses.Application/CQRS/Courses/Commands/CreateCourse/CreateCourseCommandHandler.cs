@@ -13,18 +13,19 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.CreateCourse
 {
     public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, Guid>
     {
-        private readonly IRepository<Course> CoursesRepository;
-        private readonly IRepository<AppUser> AppUserRepository;
+        private readonly IRepository<Course> _courseRepository;
+        private readonly IRepository<Mentor> _mentorRepository;
 
-        public CreateCourseCommandHandler(IRepository<Course> repository, IRepository<AppUser> repositoryUser)
+        public CreateCourseCommandHandler(IRepository<Course> courseRepository, IRepository<Mentor> mentorRepository)
         {
-            CoursesRepository = repository;
-            AppUserRepository = repositoryUser;
+            _courseRepository = courseRepository;
+            _mentorRepository = mentorRepository;
         }
 
         public async Task<Guid> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
-            var course = await CoursesRepository.Create(new Course { Rating = 0, appUser = await AppUserRepository.GetAsync(request.UserId), Expires = request.Expires, Description = request.Description, CreateAt = DateTime.Now, Images = request.Images, Name = request.Name, FilePath = request.FilePath, Price = request.Price });
+            var mentor = await _mentorRepository.GetAsync(request.MentorId);
+            var course = await _courseRepository.Create(new Course() { Mentor = mentor, Name = request.Name, CourseTags = request.CourseTags,CreateAt = DateTime.Now, IsChecked=false });
             return course.Id;
         }
     }

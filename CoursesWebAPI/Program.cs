@@ -81,15 +81,11 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllers()
-        .RequireAuthorization("ApiScope");
+    endpoints.MapControllers();
+       
 });
-
-
 app.UseCustomExceptionHandler();
-
-
-        app.MapControllers();
-        app.Run();
+app.MapControllers();
+app.Run();
 
 
