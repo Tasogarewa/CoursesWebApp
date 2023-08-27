@@ -13,30 +13,16 @@ namespace Tasogarewa.Application.CQRS.CodeExs.Commands.UpdateCodeEx
 {
     public class UpdateCodeExCommandHandler : IRequestHandler<UpdateCodeExCommand, Guid>
     {
-        private readonly IRepository<CodeEx> _codeExRepository;
+        private readonly ICodeExService _codeExService;
 
-        public UpdateCodeExCommandHandler(IRepository<CodeEx> codeExRepository)
+        public UpdateCodeExCommandHandler(ICodeExService codeExService)
         {
-            _codeExRepository = codeExRepository;
+            _codeExService = codeExService;
         }
 
         public async Task<Guid> Handle(UpdateCodeExCommand request, CancellationToken cancellationToken)
         {
-            var codeEx = await _codeExRepository.GetAsync(request.Id);
-            if (codeEx == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(codeEx), request.Id);
-            }
-            else
-            {
-                codeEx.Description = request.Description;
-                codeEx.Solution = request.Solution;
-                codeEx.Name = request.Name;
-                codeEx.Images = request.Images;
-                codeEx.Hint = request.Hint;
-               await _codeExRepository.Update(codeEx);
-            }
-            return codeEx.Id;
+           return await _codeExService.UpdateCodeExAsync(request);
         }
     }
 }

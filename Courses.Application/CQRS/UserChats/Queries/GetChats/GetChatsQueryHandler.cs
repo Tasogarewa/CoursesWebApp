@@ -15,24 +15,17 @@ namespace Tasogarewa.Application.CQRS.UserChats.Queries.GetChats
 {
     public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, ChatListVm>
     {
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IMapper _mapper;
+        private readonly IChatService _chatService;
 
-        public GetChatsQueryHandler(IRepository<AppUser> userRepository, IMapper mapper)
+        public GetChatsQueryHandler(IChatService chatService)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
+            _chatService = chatService;
         }
 
         public async Task<ChatListVm> Handle(GetChatsQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            if (user == null || request.UserId == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(user), request.UserId);
-            }
-            else
-                return new ChatListVm() { chatDtos = await _mapper.ProjectTo<ChatDto>((IQueryable)user.Chats).ToListAsync() };
+
+            return await _chatService.GetChatsAsync(request);
         }
     }
 }

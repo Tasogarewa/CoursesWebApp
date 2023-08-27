@@ -12,28 +12,16 @@ namespace Tasogarewa.Application.CQRS.LectionNotices.Commands.UpdateLectionNotic
 {
     public class UpdateLectionNoticeCommandHandler : IRequestHandler<UpdateLectionNoticeCommand, Guid>
     {
-         private readonly IRepository<LectionNotice> _lectionNoticeRepository;
+        private readonly ILectionNoticeService _lectionNoticeService;
 
-        public UpdateLectionNoticeCommandHandler(IRepository<LectionNotice> lectionNoticeRepository)
+        public UpdateLectionNoticeCommandHandler(ILectionNoticeService lectionNoticeService)
         {
-            _lectionNoticeRepository = lectionNoticeRepository;
+            _lectionNoticeService = lectionNoticeService;
         }
 
         public async Task<Guid> Handle(UpdateLectionNoticeCommand request, CancellationToken cancellationToken)
         {
-            var lectionNotice = await _lectionNoticeRepository.GetAsync(request.Id);   
-            if (lectionNotice == null||request.Id==Guid.Empty) 
-            {
-                throw new NotFoundException(nameof(lectionNotice), request.Id);
-            }
-            else
-            {
-                lectionNotice.UpdateAt=DateTime.Now;
-                lectionNotice.Text = request.Text;
-                lectionNotice.From = request.From;
-               await _lectionNoticeRepository.Update(lectionNotice); 
-            }
-            return request.Id;  
+            return await _lectionNoticeService.UpdateLectionNoticeAsync(request);
         }
     }
 }

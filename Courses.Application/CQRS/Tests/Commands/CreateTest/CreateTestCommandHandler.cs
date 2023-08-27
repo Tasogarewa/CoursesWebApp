@@ -11,18 +11,16 @@ namespace Tasogarewa.Application.CQRS.Tests.Commands.CreateTest
 {
     public class CreateTestCommandHandler : IRequestHandler<CreateTestCommand, Guid>
     {
-        private readonly IRepository<Test> _testRepository;
-        private readonly IRepository<Lection> _lectionRepository;
+        private readonly ITestService _testService;
 
-        public CreateTestCommandHandler(IRepository<Test> testRepository)
+        public CreateTestCommandHandler(ITestService testService)
         {
-            _testRepository = testRepository;
+            _testService = testService;
         }
 
         public async Task<Guid> Handle(CreateTestCommand request, CancellationToken cancellationToken)
         {
-            var test = await _testRepository.Create(new Test() { Lection = await _lectionRepository.GetAsync(request.LectionId),Description = request.Description, Name = request.Name, Questions = request.Questions });
-            return test.Id;
+            return await _testService.CreateTestAsync(request);
         }
     }
 }

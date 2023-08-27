@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.Lections.Commands.DeleteLection
 {
     public class DeleteLectionCommandHandler : IRequestHandler<DeleteLectionCommand, Unit>
     {
-        private readonly IRepository<Lection> _lectionRepository;
+        private readonly ILectionService _lectionService;
 
-        public DeleteLectionCommandHandler(IRepository<Lection> lectionRepository)
+        public DeleteLectionCommandHandler(ILectionService lectionService)
         {
-            _lectionRepository = lectionRepository;
+            _lectionService = lectionService;
         }
 
         public async Task<Unit> Handle(DeleteLectionCommand request, CancellationToken cancellationToken)
         {
-            var lection = await _lectionRepository.GetAsync(request.Id);
-            if (lection == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(lection), request.Id);
-            }
-            else
-               await _lectionRepository.Delete(lection);
-            return Unit.Value;
+            return await _lectionService.DeleteLectionAsync(request);
         }
     }
 }

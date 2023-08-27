@@ -11,20 +11,16 @@ namespace Tasogarewa.Application.CQRS.Questions.Commands.CreateQuestion
 {
     public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionCommand, Guid>
     {
-        private readonly IRepository<Test> _testRepository;
-        private readonly IRepository<Question> _questionRepository;
+        private IQuestionService _questionService;
 
-        public CreateQuestionCommandHandler(IRepository<Test> testRepository, IRepository<Question> questionRepository)
+        public CreateQuestionCommandHandler(IQuestionService questionService)
         {
-            _testRepository = testRepository;
-            _questionRepository = questionRepository;
+            _questionService = questionService;
         }
 
         public async Task<Guid> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
         {
-            var test = await _testRepository.GetAsync(request.TestId);
-            var question = await _questionRepository.Create(new Question() { CorrectAnswer = request.CorrectAnswer, FirstAnswer = request.FirstAnswer, SecondAnswer = request.SecondAnswer, ThirdAnswer = request.ThirdAnswer, FourthAnswer = request.FourthAnswer, Name = request.Name, Test = test });
-            return question.Id;
+            return await _questionService.CreateQuestionAsync(request);
         }
     }
 }

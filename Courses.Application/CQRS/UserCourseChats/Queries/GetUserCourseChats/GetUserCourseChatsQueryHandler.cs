@@ -14,24 +14,16 @@ namespace Tasogarewa.Application.CQRS.UserCourseChats.Queries.GetUserCourseChats
 {
     public class GetUserCourseChatsQueryHandler : IRequestHandler<GetUserCourseChatsQuery, UserCourseChatListVm>
     {
-        private readonly IMapper _mapper;
-        private IRepository<AppUser> _userRepository;
+        private readonly ICourseChatService _courseChatService;
 
-        public GetUserCourseChatsQueryHandler(IMapper mapper, IRepository<AppUser> userRepository)
+        public GetUserCourseChatsQueryHandler(ICourseChatService courseChatService)
         {
-            _mapper = mapper;
-            _userRepository = userRepository;
+            _courseChatService = courseChatService;
         }
 
         public async Task<UserCourseChatListVm> Handle(GetUserCourseChatsQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            if (user == null || request.UserId == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(user), request.UserId);
-            }
-            else
-                return new UserCourseChatListVm() { courseChatDtos = await _mapper.ProjectTo<UserCourseChatDto>((IQueryable)user.CourseChats).ToListAsync()};
+            return await _courseChatService.GetUserCourseChatsAsync(request);
         }
     }
 }

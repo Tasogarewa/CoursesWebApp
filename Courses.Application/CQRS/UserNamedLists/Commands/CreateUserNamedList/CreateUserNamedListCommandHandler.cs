@@ -11,20 +11,17 @@ namespace Tasogarewa.Application.CQRS.UserNamedLists.Commands.CreateUserNamedLis
 {
     public class CreateUserNamedListCommandHandler : IRequestHandler<CreateUserNamedListCommand, Guid>
     {
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IRepository<UserNamedList> _userNamedListRepository;
+      private readonly INamedListService _namedListService;
 
-        public CreateUserNamedListCommandHandler(IRepository<AppUser> userRepository, IRepository<UserNamedList> userNamedListRepository)
+        public CreateUserNamedListCommandHandler(INamedListService namedListService)
         {
-            _userRepository = userRepository;
-            _userNamedListRepository = userNamedListRepository;
+            _namedListService = namedListService;
         }
 
         public async Task<Guid> Handle(CreateUserNamedListCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            var userNamedList = await _userNamedListRepository.Create(new UserNamedList() { Name = request.Name, UserNamedCourseList = user.UserNamedCourseList });
-            return userNamedList.Id;    
+            return await _namedListService.CreateNamedListAsync(request);
+
         }
     }
 }

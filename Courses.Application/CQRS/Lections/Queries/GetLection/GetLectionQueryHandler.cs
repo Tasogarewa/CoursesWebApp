@@ -13,24 +13,16 @@ namespace Tasogarewa.Application.CQRS.Lections.Queries.GetLection
 {
     public class GetLectionQueryHandler : IRequestHandler<GetLectionQuery, LectionVm>
     {
-        private readonly IRepository<Lection> _lectionRepository;
-        private readonly IMapper _mapper;
+        private readonly ILectionService _lectionService;
 
-        public GetLectionQueryHandler(IRepository<Lection> lectionRepository, IMapper mapper)
+        public GetLectionQueryHandler(ILectionService lectionService)
         {
-            _lectionRepository = lectionRepository;
-            _mapper = mapper;
+            _lectionService = lectionService;
         }
 
         public async Task<LectionVm> Handle(GetLectionQuery request, CancellationToken cancellationToken)
         {
-            var lection = await _lectionRepository.GetAsync(request.Id);
-            if (lection == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(lection), request.Id);
-            }
-            else
-                return _mapper.Map<LectionVm>(lection);
+            return await _lectionService.GetLectionAsync(request);
         }
     }
 }

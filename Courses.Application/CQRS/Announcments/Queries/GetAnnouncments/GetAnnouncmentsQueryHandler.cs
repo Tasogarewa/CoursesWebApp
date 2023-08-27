@@ -15,25 +15,16 @@ namespace Tasogarewa.Application.CQRS.Announcments.Queries.GetAnnouncments
 {
     public class GetAnnouncmentsQueryHandler : IRequestHandler<GetAnnouncmentsQuery, AnnouncmentListVm>
     {
-            private readonly IRepository<Course> _courseRepository;
-            private readonly IMapper _mapper;
-        public GetAnnouncmentsQueryHandler(IRepository<Course> courseRepository, IMapper mapper)
+        private readonly IAnnouncmentService _announcmentService;
+
+        public GetAnnouncmentsQueryHandler(IAnnouncmentService announcmentService)
         {
-            _courseRepository = courseRepository;
-            _mapper = mapper;
+            _announcmentService = announcmentService;
         }
 
         public async Task<AnnouncmentListVm> Handle(GetAnnouncmentsQuery request, CancellationToken cancellationToken)
         {
-            var course = await _courseRepository.GetAsync(request.CourseId);
-            if(course == null||request.CourseId==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(course), request.CourseId);
-            }
-            else
-            {
-                return new AnnouncmentListVm { AnnouncmentDtos = await _mapper.ProjectTo<AnnouncmentDto>((IQueryable)course.Announcements).ToListAsync() };
-            }
+          return await _announcmentService.GetAnnouncmentsAsync(request);
         }
     }
 }

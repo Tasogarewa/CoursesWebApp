@@ -12,25 +12,16 @@ namespace Tasogarewa.Application.CQRS.UserLikedCourse.Commands.DeleteUserLikedCo
 {
     public class DeleteUserLikedCourseCommandHandler : IRequestHandler<DeleteUserLikedCourseCommand, Unit>
     {
-        private readonly IRepository<LikedCourse> _likedCourse;
+        private readonly ILikedCourseService _likedCourseService;
 
-        public DeleteUserLikedCourseCommandHandler(IRepository<LikedCourse> likedCourse)
+        public DeleteUserLikedCourseCommandHandler(ILikedCourseService likedCourseService)
         {
-            _likedCourse = likedCourse;
+            _likedCourseService = likedCourseService;
         }
 
         public async Task<Unit> Handle(DeleteUserLikedCourseCommand request, CancellationToken cancellationToken)
         {
-            var likedCourse = await _likedCourse.GetAsync(request.Id);
-            if (likedCourse == null||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(likedCourse), request.Id);
-            }
-            else
-            {
-                await _likedCourse.Delete(likedCourse);
-            }
-            return Unit.Value;
+            return await _likedCourseService.DeleteLikedCourseAsync(request);
         }
     }
 }

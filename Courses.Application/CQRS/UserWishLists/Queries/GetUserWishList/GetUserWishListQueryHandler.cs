@@ -13,25 +13,16 @@ namespace Tasogarewa.Application.CQRS.UserWishLists.Queries.GetUserWishList
 {
     public class GetUserWishListQueryHandler : IRequestHandler<GetUserWishListQuery, UserWishListVm>
     {
-      
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IMapper _mapper;
+      private readonly IUserService _userService;
 
-        public GetUserWishListQueryHandler(IRepository<AppUser> userRepository, IMapper mapper)
+        public GetUserWishListQueryHandler(IUserService userService)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<UserWishListVm> Handle(GetUserWishListQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            if (user == null||request.UserId==Guid.Empty) 
-            {
-                throw new NotFoundException(nameof(user), request.UserId);
-            }
-            else
-                return _mapper.Map<UserWishListVm>(user);
+            return await _userService.GetWishedCoursesAsync(request);
         }
     }
 }

@@ -13,28 +13,16 @@ namespace Tasogarewa.Application.CQRS.Tests.Commands.UpdateTest
 {
     public class UpdateTestCommandHandler : IRequestHandler<UpdateTestCommand, Guid>
     {
-        private readonly IRepository<Test> _testRepository;
+      private readonly ITestService _testService;
 
-        public UpdateTestCommandHandler(IRepository<Test> testRepository)
+        public UpdateTestCommandHandler(ITestService testService)
         {
-            _testRepository = testRepository;
+            _testService = testService;
         }
 
         public async Task<Guid> Handle(UpdateTestCommand request, CancellationToken cancellationToken)
         {
-            var test = await _testRepository.GetAsync(request.Id);
-            if (test == null||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(test),request.Id);
-            }
-            else
-            {
-                test.Description=request.Description;
-                test.Questions=request.Questions;
-                test.Name= request.Name;
-                await _testRepository.Update(test);
-            }
-            return test.Id;
+            return await _testService.UpdateTestAsync(request);
         }
     }
 }

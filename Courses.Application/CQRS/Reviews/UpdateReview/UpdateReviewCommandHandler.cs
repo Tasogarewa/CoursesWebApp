@@ -12,29 +12,16 @@ namespace Tasogarewa.Application.CQRS.Reviews.UpdateReview
 {
     public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand, Guid>
     {
-        private readonly IRepository<Review> _reviewRepository;
+      private readonly IReviewService _reviewService;
 
-        public UpdateReviewCommandHandler(IRepository<Review> reviewRepository)
+        public UpdateReviewCommandHandler(IReviewService reviewService)
         {
-            _reviewRepository = reviewRepository;
+            _reviewService = reviewService;
         }
 
         public async Task<Guid> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
         {
-            var review = await _reviewRepository.GetAsync(request.Id);
-            if (review == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(review), request.Id);
-            }
-            else
-            {
-                review.UpdateAt = DateTime.Now;
-                review.RatingOfReview = request.RatingOfReview;
-                review.Images = request.Images;
-                review.Text = request.Text;
-                await _reviewRepository.Update(review);
-            }
-            return request.Id;
+            return await _reviewService.UpdateReviewAsync(request);
 
         }
     }

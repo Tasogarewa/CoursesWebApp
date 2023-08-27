@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.WishedCourses.Commands.DeleteWishedCourse
 {
     public class DeleteWishedCourseCommandHandler : IRequestHandler<DeleteWishedCourseCommand, Unit>
     {
-        private readonly IRepository<UserWishedCourse> _wishedCourseRepository;
+     private readonly IWishedCourseService _wishedCourseService;
 
-        public DeleteWishedCourseCommandHandler(IRepository<UserWishedCourse> wishedCourseRepository)
+        public DeleteWishedCourseCommandHandler(IWishedCourseService wishedCourseService)
         {
-            _wishedCourseRepository = wishedCourseRepository;
+            _wishedCourseService = wishedCourseService;
         }
 
         public async Task<Unit> Handle(DeleteWishedCourseCommand request, CancellationToken cancellationToken)
         {
-            var wishedCourse = await _wishedCourseRepository.GetAsync(request.Id);
-            if (wishedCourse == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(wishedCourse), request.Id);
-            }
-            else
-                _wishedCourseRepository.Delete(wishedCourse);
-            return Unit.Value;
+            return await _wishedCourseService.DeleteWishedCourseAsync(request);
         }
     }
 }

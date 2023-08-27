@@ -12,28 +12,16 @@ namespace Tasogarewa.Application.CQRS.Comments.UpdateComment
 {
     public class UpdateCommentCommandHandler : IRequestHandler<UpdateCommentCommand, Guid>
     {
-        private readonly IRepository<Comment> _commentRepository;
+       private readonly ICommentService _commentsService;
 
-        public UpdateCommentCommandHandler(IRepository<Comment> commentRepository)
+        public UpdateCommentCommandHandler(ICommentService commentsService)
         {
-            _commentRepository = commentRepository;
+            _commentsService = commentsService;
         }
 
         public async Task<Guid> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
         {
-            var comment = await _commentRepository.GetAsync(request.Id);
-            if (comment == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(comment), request.Id);
-            }
-            else
-            {
-                comment.UpdateAt = DateTime.Now;
-                comment.Text = request.Text;
-                comment.Replay = request.Replay;
-              await  _commentRepository.Update(comment);
-            }
-            return comment.Id;
+            return await _commentsService.UpdateCommentAsync(request);
         }
     }
 }

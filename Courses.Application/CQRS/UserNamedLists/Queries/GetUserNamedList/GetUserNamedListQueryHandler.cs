@@ -13,24 +13,16 @@ namespace Tasogarewa.Application.CQRS.UserNamedLists.Queries.GetUserNamedList
 {
     public class GetUserNamedListQueryHandler : IRequestHandler<GetUserNamedListQuery, UserNamedListVm>
     {
-        private readonly IRepository<UserNamedList> _userNamedListRepository;
-        private readonly IMapper _mapper;
+        private readonly INamedListService _namedListService;
 
-        public GetUserNamedListQueryHandler(IRepository<UserNamedList> userNamedListRepository, IMapper mapper)
+        public GetUserNamedListQueryHandler(INamedListService namedListService)
         {
-            _userNamedListRepository = userNamedListRepository;
-            _mapper = mapper;
+            _namedListService = namedListService;
         }
 
         public async Task<UserNamedListVm> Handle(GetUserNamedListQuery request, CancellationToken cancellationToken)
         {
-            var userNamedList = _userNamedListRepository.GetAsync(request.Id);
-            if (userNamedList == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(userNamedList), request.Id);
-            }
-            else
-                return _mapper.Map<UserNamedListVm>(userNamedList);
+            return await _namedListService.GetNamedListAsync(request);
         }
     }
 }

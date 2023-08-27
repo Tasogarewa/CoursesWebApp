@@ -14,24 +14,16 @@ namespace Tasogarewa.Application.CQRS.UserLikedCourses.Queries.GetUserLikedCours
 {
     public class GetUserLikedCoursesQueryHandler : IRequestHandler<GetUserLikedCoursesQuery, UserLikedCoursesVm>
     {
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IMapper _mapper;
+      private readonly IUserService _userService;
 
-        public GetUserLikedCoursesQueryHandler(IRepository<AppUser> userRepository, IMapper mapper)
+        public GetUserLikedCoursesQueryHandler(IUserService userService)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<UserLikedCoursesVm> Handle(GetUserLikedCoursesQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            if (user == null || request.UserId == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(user), request.UserId);
-            }
-            else
-               return _mapper.Map<UserLikedCoursesVm>(user.LikedCourses);
+            return await _userService.GetLikedCoursesAsync(request);
         }
     }
 }

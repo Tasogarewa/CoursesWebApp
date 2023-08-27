@@ -1,5 +1,6 @@
 ﻿using Courses.Domain;
 using MediatR;
+using Microsoft.AspNetCore.Server.HttpSys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,16 @@ namespace Tasogarewa.Application.CQRS.AppUsers.Commands.CreateAppUser
 {
     public class CreateAppUserCommandHandler : IRequestHandler<CreateAppUserCommand, Guid>
     {
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IRepository<Mentor> _mentorRepository;
+        private readonly IUserService _userService;
 
-        public CreateAppUserCommandHandler(IRepository<AppUser> userRepository, IRepository<Mentor> mentorRepository, IRepository<Image> imageRepository)
+        public CreateAppUserCommandHandler(IUserService userService)
         {
-            _userRepository = userRepository;
-            _mentorRepository = mentorRepository;
+            _userService = userService;
         }
 
         public async Task<Guid> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
         {
-            var mentor = await _mentorRepository.Create(new Mentor() { Email = request.Email, Name = request.Name, Surname = request.Surname});
-            var user = await _userRepository.Create(new AppUser() { Email=request.Email, Name=request.Name, Surname = request.Surname, Mentor = mentor,Basket =new Basket(), UserWishList = new UserWishList(),LikedCourses=new LikedCourses(),UserNamedCourseList=new UserNamedCourseList(),ArchivedCourse = new ArchivedCourses() });
-            return user.Id;
+            return await _userService.CreateUserAsync(request);
         }
     }
 }

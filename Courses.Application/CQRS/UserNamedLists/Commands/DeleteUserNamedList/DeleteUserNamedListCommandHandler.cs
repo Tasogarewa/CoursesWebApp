@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.UserNamedLists.Commands.DeleteUserNamedLis
 {
     public class DeleteUserNamedListCommandHandler : IRequestHandler<DeleteUserNamedListCommand, Unit>
     {
-        private readonly IRepository<UserNamedList> _userNamedListRepository;
+        private readonly INamedListService _namedListService;
 
-        public DeleteUserNamedListCommandHandler(IRepository<UserNamedList> userNamedListRepository)
+        public DeleteUserNamedListCommandHandler(INamedListService namedListService)
         {
-            _userNamedListRepository = userNamedListRepository;
+            _namedListService = namedListService;
         }
 
         public async Task<Unit> Handle(DeleteUserNamedListCommand request, CancellationToken cancellationToken)
         {
-            var userNamedList = await _userNamedListRepository.GetAsync(request.Id);
-            if(userNamedList==null||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(userNamedList), request.Id);
-            }
-            else
-              await  _userNamedListRepository.Delete(userNamedList);
-            return Unit.Value;
+            return await _namedListService.DeleteNamedListAsync(request);
         }
     }
 }

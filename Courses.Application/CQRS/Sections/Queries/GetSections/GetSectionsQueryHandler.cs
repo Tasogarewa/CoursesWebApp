@@ -14,25 +14,16 @@ namespace Tasogarewa.Application.CQRS.Sections.Queries.GetSections
 {
     public class GetSectionsQueryHandler : IRequestHandler<GetSectionsQuery, SectionListVm>
     {
-        private readonly IRepository<Course> _courseRepository;
-        private readonly IMapper _mapper;
+        private readonly ISectionService _sectionService;
 
-        public GetSectionsQueryHandler(IRepository<Course> courseRepository, IMapper mapper)
+        public GetSectionsQueryHandler(ISectionService sectionService)
         {
-            _courseRepository = courseRepository;
-            _mapper = mapper;
+            _sectionService = sectionService;
         }
 
         public async Task<SectionListVm> Handle(GetSectionsQuery request, CancellationToken cancellationToken)
         {
-            var course = await _courseRepository.GetAsync(request.CourseId);
-            var sections = course.Sections;
-            if (course == null || request.CourseId == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(course), request.CourseId);
-            }
-            else
-                return new SectionListVm() { sectionDtos = await _mapper.ProjectTo<SectionDto>((IQueryable)sections).ToListAsync() };
+            return await _sectionService.GetSectionsAsync(request);
         }
     }
 }

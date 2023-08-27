@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.Questions.Commands.DeleteQuestion
 {
     public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionCommand, Unit>
     {
-        private readonly IRepository<Question> _questionRepository;
+        private IQuestionService _questionService;
 
-        public DeleteQuestionCommandHandler(IRepository<Question> questionRepository)
+        public DeleteQuestionCommandHandler(IQuestionService questionService)
         {
-            _questionRepository = questionRepository;
+            _questionService = questionService;
         }
 
         public async Task<Unit> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
-            var question = await _questionRepository.GetAsync(request.Id);
-            if(question == null||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(question), request.Id);
-            }
-            else
-               await _questionRepository.Delete(question);
-            return Unit.Value;
+            return await _questionService.DeleteQuestionAsync(request);
         }
     }
 }

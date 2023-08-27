@@ -12,20 +12,16 @@ namespace Tasogarewa.Application.CQRS.UserChats.Commands.CreateChat
 {
     public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Guid>
     {
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IRepository<Chat> _chatRepository;
+        private readonly IChatService _chatService;
 
-        public CreateChatCommandHandler(IRepository<AppUser> userRepository, IRepository<Chat> chatRepository)
+        public CreateChatCommandHandler(IChatService chatService)
         {
-            _userRepository = userRepository;
-            _chatRepository = chatRepository;
+            _chatService = chatService;
         }
 
         public async Task<Guid> Handle(CreateChatCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            var chat = await _chatRepository.Create(new Chat() { Name = request.Name, Users = new List<AppUser>() { user, request.User } });
-            return chat.Id;
+            return await _chatService.CreateChatAsync(request);
         }
     }
 }

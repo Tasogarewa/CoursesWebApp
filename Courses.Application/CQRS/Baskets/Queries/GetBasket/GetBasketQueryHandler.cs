@@ -13,24 +13,16 @@ namespace Tasogarewa.Application.CQRS.Baskets.Queries.GetBasket
 {
     public class GetBasketQueryHandler : IRequestHandler<GetBasketQuery, BasketVm>
     {
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IMapper _mapper;
+      private readonly IUserService _userService;
 
-        public GetBasketQueryHandler(IRepository<AppUser> userRepository, IMapper mapper)
+        public GetBasketQueryHandler(IUserService userService)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<BasketVm> Handle(GetBasketQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            if (user == null || request.UserId == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(user), request.UserId);
-            }
-            else
-                return  _mapper.Map<BasketVm>(user.Basket);
+            return await _userService.GetBasketAsync(request);
         }
     }
 }

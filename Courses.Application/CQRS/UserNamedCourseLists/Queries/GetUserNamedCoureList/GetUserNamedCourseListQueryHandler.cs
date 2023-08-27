@@ -13,24 +13,16 @@ namespace Tasogarewa.Application.CQRS.UserNamedCourseLists.Queries.GetUserNamedC
 {
     public class GetUserNamedCourseListQueryHandler : IRequestHandler<GetUserNamedCourseListQuery, UserNamedCourseListVm>
     {
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IMapper _mapper;
+    private readonly IUserService _userService;
 
-        public GetUserNamedCourseListQueryHandler(IRepository<AppUser> userRepository, IMapper mapper)
+        public GetUserNamedCourseListQueryHandler(IUserService userService)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<UserNamedCourseListVm> Handle(GetUserNamedCourseListQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            if (user == null || request.UserId == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(user), request.UserId);
-            }
-            else
-                return _mapper.Map<UserNamedCourseListVm>(user.UserNamedCourseList);
+            return await _userService.GetNamedCourseListsAsync(request);
         }
     }
 }

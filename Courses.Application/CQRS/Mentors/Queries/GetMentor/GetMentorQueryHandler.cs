@@ -13,24 +13,16 @@ namespace Tasogarewa.Application.CQRS.Mentors.Queries.GetMentor
 {
     public class GetMentorQueryHandler : IRequestHandler<GetMentorQuery, MentorVm>
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<Mentor> _mentorRepository;
+        private readonly IMentorService _mentorService;
 
-        public GetMentorQueryHandler(IMapper mapper, IRepository<Mentor> mentorRepository)
+        public GetMentorQueryHandler(IMentorService mentorService)
         {
-            _mapper = mapper;
-            _mentorRepository = mentorRepository;
+            _mentorService = mentorService;
         }
 
         public async Task<MentorVm> Handle(GetMentorQuery request, CancellationToken cancellationToken)
         {
-            var mentor = await _mentorRepository.GetAsync(request.Id);
-            if (mentor == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(mentor), request.Id);
-            }
-            else
-                return _mapper.Map<MentorVm>(mentor);
+            return await _mentorService.GetMentorAsync(request);
         }
     }
 }

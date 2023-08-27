@@ -14,26 +14,16 @@ namespace Tasogarewa.Application.CQRS.Announcments.Commands.DeleteAnnouncments
 {
     public class DeleteAnnouncmentCommandHandler:IRequestHandler<DeleteAnnouncmentCommand,Unit>
     {
-        private readonly IRepository<Announcement> _announcmentsRepository;
+        private readonly IAnnouncmentService _announcmentService;
 
-        public DeleteAnnouncmentCommandHandler(IRepository<Announcement> announcmentsRepository)
+        public DeleteAnnouncmentCommandHandler(IAnnouncmentService announcmentService)
         {
-            _announcmentsRepository = announcmentsRepository;
+            _announcmentService = announcmentService;
         }
 
         public async Task<Unit> Handle(DeleteAnnouncmentCommand request, CancellationToken cancellationToken)
         {
-            var announcment = await _announcmentsRepository.GetAsync(request.Id);
-           if(announcment==null||request.UserId==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(announcment), request.Id);
-              
-            }
-            else
-            {
-                _announcmentsRepository.Delete(announcment);
-            }
-            return Unit.Value;
+            return await _announcmentService.DeleteAnnouncmentAsync(request);
         }
     }
 }

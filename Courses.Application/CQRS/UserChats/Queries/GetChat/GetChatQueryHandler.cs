@@ -13,24 +13,16 @@ namespace Tasogarewa.Application.CQRS.UserChats.Queries.GetChat
 {
     public  class GetChatQueryHandler:IRequestHandler<GetChatQuery,ChatVm>
     {
-        private readonly IRepository<Chat> _chatRepository;
-        private readonly IMapper _mapper;
+        private readonly IChatService _chatService;
 
-        public GetChatQueryHandler(IRepository<Chat> chatRepository, IMapper mapper)
+        public GetChatQueryHandler(IChatService chatService)
         {
-            _chatRepository = chatRepository;
-            _mapper = mapper;
+            _chatService = chatService;
         }
 
         public async Task<ChatVm> Handle(GetChatQuery request, CancellationToken cancellationToken)
         {
-            var chat = await _chatRepository.GetAsync(request.Id);
-            if(chat == null||request.Id==Guid.Empty) 
-            {
-                throw new NotFoundException(nameof(chat),request.Id);
-            }
-            else
-                return _mapper.Map<ChatVm>(chat);
+            return await _chatService.GetChatAsync(request);
         }
     }
 }

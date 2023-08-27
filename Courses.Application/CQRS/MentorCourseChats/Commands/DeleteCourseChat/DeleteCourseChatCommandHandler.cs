@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.MentorCourseChats.Commands.DeleteCourseCha
 {
     public class DeleteCourseChatCommandHandler : IRequestHandler<DeleteCourseChatCommand, Unit>
     {
-        private readonly IRepository<CourseChat> _courseChatRepository;
+      private readonly ICourseChatService _courseChatService;
 
-        public DeleteCourseChatCommandHandler(IRepository<CourseChat> courseChatRepository)
+        public DeleteCourseChatCommandHandler(ICourseChatService courseChatService)
         {
-            _courseChatRepository = courseChatRepository;
+            _courseChatService = courseChatService;
         }
 
         public async Task<Unit> Handle(DeleteCourseChatCommand request, CancellationToken cancellationToken)
         {
-            var courseChat = await _courseChatRepository.GetAsync(request.Id);
-            if (courseChat == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(courseChat), request.Id);
-            }
-            else
-              await  _courseChatRepository.Delete(courseChat);
-            return Unit.Value;
+            return await _courseChatService.DeleteCourseChatAsync(request);
         }
     }
 }

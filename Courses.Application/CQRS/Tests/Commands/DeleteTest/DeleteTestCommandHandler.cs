@@ -13,23 +13,16 @@ namespace Tasogarewa.Application.CQRS.Tests.Commands.DeleteTest
 {
     public class DeleteTestCommandHandler : IRequestHandler<DeleteTestCommand, Unit>
     {
-        private readonly IRepository<Test> _testRepository;
+        private readonly ITestService _testService;
 
-        public DeleteTestCommandHandler(IRepository<Test> testRepository)
+        public DeleteTestCommandHandler(ITestService testService)
         {
-            _testRepository = testRepository;
+            _testService = testService;
         }
 
         public async Task<Unit> Handle(DeleteTestCommand request, CancellationToken cancellationToken)
         {
-            var test = await _testRepository.GetAsync(request.Id);
-            if (test == null||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(test),request.Id);
-            }
-            else
-               await _testRepository.Delete(test);
-            return Unit.Value;
+            return await _testService.DeleteTestAsync(request);
         }
     }
 }

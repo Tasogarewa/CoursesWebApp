@@ -13,23 +13,16 @@ namespace Tasogarewa.Application.CQRS.AppUsers.Commands.DeleteAppUser
 {
     public class DeleteAppUserCommandHandler : IRequestHandler<DeleteAppUserCommand, Unit>
     {
-        private readonly IRepository<AppUser> _userRepository;
+        private readonly IUserService _userService;
 
-        public DeleteAppUserCommandHandler(IRepository<AppUser> userRepository)
+        public DeleteAppUserCommandHandler(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         public async Task<Unit> Handle(DeleteAppUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.Id);
-            if (user == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(user), request.Id);
-            }
-            else
-               await _userRepository.Delete(user);
-            return Unit.Value;
+            return await _userService.DeleteUserAsync(request);
         }
     }
 }

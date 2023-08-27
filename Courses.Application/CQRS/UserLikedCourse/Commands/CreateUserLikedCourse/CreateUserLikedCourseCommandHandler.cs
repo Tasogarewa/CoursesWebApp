@@ -13,23 +13,16 @@ namespace Tasogarewa.Application.CQRS.UserLikedCourse.Commands.CreateUserLikedCo
 {
     public class CreateUserLikedCourseCommandHandler : IRequestHandler<CreateUserLikedCourseCommand, Guid>
     {
-        private readonly IRepository<Course> _courseRepository;
-        private readonly IRepository<LikedCourse> _likedCourse;
-        private readonly IRepository<AppUser> _userRepository;
+        private readonly ILikedCourseService _likedCourseService;
 
-        public CreateUserLikedCourseCommandHandler(IRepository<Course> courseRepository, IRepository<LikedCourse> likedCourse, IRepository<AppUser> userRepository)
+        public CreateUserLikedCourseCommandHandler(ILikedCourseService likedCourseService)
         {
-            _courseRepository = courseRepository;
-            _likedCourse = likedCourse;
-            _userRepository = userRepository;
+            _likedCourseService = likedCourseService;
         }
 
         public async Task<Guid> Handle(CreateUserLikedCourseCommand request, CancellationToken cancellationToken)
         {
-          var course = await _courseRepository.GetAsync(request.CourseId);
-            var user = await _userRepository.GetAsync(request.UserId);
-          var likedCourse = await _likedCourse.Create(new LikedCourse { LikedCourses = user.LikedCourses, Course = await _courseRepository.GetAsync(request.CourseId)});
-            return likedCourse.Id;
+             return await _likedCourseService.CreateLikedCourseAsync(request); 
         }
     }
 }

@@ -10,6 +10,5 @@ namespace Tasogarewa.Application.CQRS.UserArchivedCourse.Commands.DeleteArchived
     public class DeleteArchivedCourseCommand:IRequest<Unit>
     {
         public Guid Id { get; set; }
-        public Guid CourseId { get; set; }  
     }
 }

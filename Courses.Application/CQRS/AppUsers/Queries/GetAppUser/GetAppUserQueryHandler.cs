@@ -13,24 +13,16 @@ namespace Tasogarewa.Application.CQRS.AppUsers.Queries.GetAppUser
 {
     public class GetAppUserQueryHandler : IRequestHandler<GetAppUserQuery, AppUserVm>
     {
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public GetAppUserQueryHandler(IRepository<AppUser> userRepository, IMapper mapper)
+        public GetAppUserQueryHandler(IUserService userService)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<AppUserVm> Handle(GetAppUserQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.Id);
-            if (user == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(user), request.Id);
-            }
-            else
-                return _mapper.Map<AppUserVm>(user);    
+            return await _userService.GetUserAsync(request);
         }
     }
 }

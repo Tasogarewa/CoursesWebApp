@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.Sections.Commands.DeleteSection
 {
     public class DeleteSectionCommandHandler : IRequestHandler<DeleteSectionCommand, Unit>
     {
-        private readonly IRepository<Section> _sectionRepository;
+       private readonly ISectionService _sectionService;
 
-        public DeleteSectionCommandHandler(IRepository<Section> sectionRepository)
+        public DeleteSectionCommandHandler(ISectionService sectionService)
         {
-            _sectionRepository = sectionRepository;
+            _sectionService = sectionService;
         }
 
         public async Task<Unit> Handle(DeleteSectionCommand request, CancellationToken cancellationToken)
         {
-            var section = await _sectionRepository.GetAsync(request.Id);
-            if (section == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(section), request.Id);
-            }
-            else
-                 await _sectionRepository.Delete(section);
-                return Unit.Value;
+            return await _sectionService.DeleteSectionAsync(request);
         }
     }
 }

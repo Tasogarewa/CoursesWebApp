@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.InBasketCourses.Commands.CreateInBasketCou
 {
     public class CreateInBasketCourseCommandHandler : IRequestHandler<CreateInBasketCourseCommand, Guid>
     {
-        private readonly IRepository<Course> _courseRepository;
-        private readonly IRepository<Basket> _basketRepository;
-        private readonly IRepository<InBasketCourse> _inBasketCourse;
+     private readonly IBasketCourseService _basketCourseService;
 
-        public CreateInBasketCourseCommandHandler(IRepository<Course> courseRepository, IRepository<Basket> basketRepository, IRepository<InBasketCourse> inBasketCourse)
+        public CreateInBasketCourseCommandHandler(IBasketCourseService basketCourseService)
         {
-            _courseRepository = courseRepository;
-            _basketRepository = basketRepository;
-            _inBasketCourse = inBasketCourse;
+            _basketCourseService = basketCourseService;
         }
 
         public async Task<Guid> Handle(CreateInBasketCourseCommand request, CancellationToken cancellationToken)
         {
-            var basket = await _basketRepository.GetAsync(request.BasketId);
-            var course = await _courseRepository.GetAsync(request.CurseId);
-            var inBasketCourse = await _inBasketCourse.Create(new InBasketCourse() { Basket = basket, Course = course });
-            return inBasketCourse.Id;
+            return await _basketCourseService.CreateInBasketCourseAsync(request);
         }
     }
 }

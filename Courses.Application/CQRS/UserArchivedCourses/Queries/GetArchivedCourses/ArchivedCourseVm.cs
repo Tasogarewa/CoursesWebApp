@@ -9,13 +9,13 @@ using Tasogarewa.Domain;
 
 namespace Tasogarewa.Application.CQRS.UserArchivedCourses.Queries.GetArchivedCourses
 {
-    public class ArchivedCoursesVm:IMapWith<ArchivedCourses>
+    public class ArchivedCourseVm:IMapWith<ArchivedCourses>
     {
         public Guid Id { get; set; }
         public List<ArchivedCourse> Courses { get; set; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<ArchivedCourses, ArchivedCoursesVm>()
+            profile.CreateMap<ArchivedCourses, ArchivedCourseVm>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(x => x.Id))
                 .ForMember(x => x.Courses, opt => opt.MapFrom(x => x.Courses));
                 

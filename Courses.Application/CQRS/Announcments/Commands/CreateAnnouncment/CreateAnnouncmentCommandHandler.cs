@@ -13,21 +13,16 @@ namespace Tasogarewa.Application.CQRS.Announcments.Commands.CreateAnnouncments
 {
     public class CreateAnnouncmentCommandHandler : IRequestHandler<CreateAnnouncmentCommand, Guid>
     {
-        private readonly IRepository<Announcement> _announcmentsRepository;
-        private readonly IRepository<Course> _courseRepository;
-        private readonly IRepository<Mentor> _mentorRepository;
+        private readonly IAnnouncmentService _announcmentService;
 
-        public CreateAnnouncmentCommandHandler(IRepository<Announcement> announcmentsRepository, IRepository<Course> courseRepository, IRepository<Mentor> mentorRepository)
+        public CreateAnnouncmentCommandHandler(IAnnouncmentService announcmentService)
         {
-            _announcmentsRepository = announcmentsRepository;
-            _courseRepository = courseRepository;
-            _mentorRepository = mentorRepository;
+            _announcmentService = announcmentService;
         }
 
         public async Task<Guid> Handle(CreateAnnouncmentCommand request, CancellationToken cancellationToken)
         {
-            var announcment = await _announcmentsRepository.Create(new Announcement() { Course = await _courseRepository.GetAsync(request.CourseId), CreateAt = DateTime.Now, Images = request.Images, Text = request.Text, Mentor = await _mentorRepository.GetAsync(request.MentorId) });
-            return announcment.Id; 
+            return await _announcmentService.CreateAnnouncmentAsync(request);
         }
     }
 }

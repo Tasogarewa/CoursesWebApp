@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Tasogarewa.Application.CQRS.UserArchivedCourses.Queries.GetArchivedCourses
 {
-    public class GetArchivedCoursesQuery:IRequest<ArchivedCoursesVm>
+    public class GetArchivedCoursesQuery:IRequest<ArchivedCourseVm>
     {
         public Guid UserId { get; set; }
     }

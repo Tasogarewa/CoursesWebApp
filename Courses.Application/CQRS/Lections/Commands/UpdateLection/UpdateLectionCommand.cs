@@ -14,7 +14,7 @@ namespace Tasogarewa.Application.CQRS.Lections.Commands.UpdateLection
         public string Name { get; set; }
         public string Description { get; set; }
         public string FilePath { get; set; }
-        public Guid? TestId { get; set; }
-        public Guid? CodeExId  { get; set; }
+        public Guid TestId { get; set; }
+        public Guid CodeExId  { get; set; }
     }
 }

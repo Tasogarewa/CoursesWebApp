@@ -12,31 +12,16 @@ namespace Tasogarewa.Application.CQRS.Questions.Commands.UpdateQuestion
 {
     public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionCommand, Guid>
     {
-        private readonly IRepository<Question> _questionRepository;
+      private IQuestionService _questionService;
 
-        public UpdateQuestionCommandHandler(IRepository<Question> questionRepository)
+        public UpdateQuestionCommandHandler(IQuestionService questionService)
         {
-            _questionRepository = questionRepository;
+            _questionService = questionService;
         }
 
         public async Task<Guid> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
         {
-            var question = await _questionRepository.GetAsync(request.Id);
-            if (question == null||request.Id==Guid.Empty) 
-            {
-                throw new NotFoundException(nameof(question), request.Id);
-            }
-            else
-            {
-                question.FourthAnswer = request.FourthAnswer;
-                question.ThirdAnswer =request.ThirdAnswer;
-                question.FirstAnswer = request.FirstAnswer;
-                question.SecondAnswer = request.SecondAnswer;
-                question.Name = request.Name;
-                question.CorrectAnswer= request.CorrectAnswer;
-                await _questionRepository.Update(question);
-                return question.Id;
-            }
+            return await _questionService.UpdateQuestionAsync(request);
         }
     }
 }

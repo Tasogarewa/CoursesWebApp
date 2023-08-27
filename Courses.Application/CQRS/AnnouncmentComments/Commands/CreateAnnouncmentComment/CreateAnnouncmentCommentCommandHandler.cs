@@ -12,25 +12,17 @@ namespace Tasogarewa.Application.CQRS.AnnouncmentComments.Commands.CreateAnnounc
 {
     public class CreateAnnouncmentCommentCommandHandler:IRequestHandler<CreateAnnouncmentCommentCommand,Guid>
     {
-        private readonly IRepository<Announcement> _announcmentRepository;
-        private readonly IRepository<Comment> _commentRepository;
-        private readonly IRepository<AppUser> _userRepository;
+        private readonly ICommentService _commentsService;
 
-        public CreateAnnouncmentCommentCommandHandler(IRepository<Announcement> announcmentRepository, IRepository<Comment> commentRepository, IRepository<AppUser> userRepository)
+        public CreateAnnouncmentCommentCommandHandler(ICommentService commentsService)
         {
-            _announcmentRepository = announcmentRepository;
-            _commentRepository = commentRepository;
-            _userRepository = userRepository;
+            _commentsService = commentsService;
         }
 
         public async Task<Guid> Handle(CreateAnnouncmentCommentCommand request, CancellationToken cancellationToken)
         {
-            var announcment = await _announcmentRepository.GetAsync(request.AnnouncmentId);
-            var user = await _userRepository.GetAsync(request.UserId);
-            var comment = await _commentRepository.Create(new Comment() { CreateAt = DateTime.Now, Replay = request.Replay, Text = request.Text, User = user });
-            announcment.Comments.Add(comment);
-            await _announcmentRepository.Update(announcment);
-            return announcment.Id;
+
+            return await _commentsService.CreateAnnouncmentCommentAsync(request);
         }
     }
 }

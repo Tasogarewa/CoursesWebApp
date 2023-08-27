@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.InListCourses.Commands.CreateInListCourses
 {
     public class CreateInListCourseCommandHandler : IRequestHandler<CreateInListCourseCommand, Guid>
     {
-        private readonly IRepository<Course> _courseRepository;
-        public readonly IRepository<InListCourse> _inListCourse;
-        private readonly IRepository<UserNamedList> _userNamedList;
+    private readonly IListCourseService _listCourseService;
 
-        public CreateInListCourseCommandHandler(IRepository<Course> courseRepository, IRepository<InListCourse> inListCourse, IRepository<UserNamedList> userNamedList)
+        public CreateInListCourseCommandHandler(IListCourseService listCourseService)
         {
-            _courseRepository = courseRepository;
-            _inListCourse = inListCourse;
-            _userNamedList = userNamedList;
+            _listCourseService = listCourseService;
         }
 
         public async Task<Guid> Handle(CreateInListCourseCommand request, CancellationToken cancellationToken)
         {
-            var course = await _courseRepository.GetAsync(request.CourseId);
-            var userNamedList = await _userNamedList.GetAsync(request.UserNamedListId);
-            var inListCourse = await _inListCourse.Create(new InListCourse() { Course = course, UserNamedList = userNamedList });
-            return inListCourse.Id;
+            return await _listCourseService.CreateInListCourseAsync(request);
         }
     }
 }

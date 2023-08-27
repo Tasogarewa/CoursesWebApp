@@ -12,26 +12,17 @@ namespace Tasogarewa.Application.CQRS.MentorCourseChats.Commands.UpdateCourseCha
 {
     public class UpdateCourseChatCommandHandler : IRequestHandler<UpdateCourseChatCommand, Guid>
     {
-        private readonly IRepository<CourseChat> _courseChatRepository;
+        private readonly ICourseChatService _courseChatService;
 
-        public UpdateCourseChatCommandHandler(IRepository<CourseChat> courseChatRepository)
+        public UpdateCourseChatCommandHandler(ICourseChatService courseChatService)
         {
-            _courseChatRepository = courseChatRepository;
+            _courseChatService = courseChatService;
         }
 
         public async Task<Guid> Handle(UpdateCourseChatCommand request, CancellationToken cancellationToken)
         {
-            var courseChat = await _courseChatRepository.GetAsync(request.Id);
-            if (courseChat == null||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(courseChat), request.Id);
-            }
-            else
-            {
-                courseChat.Name = request.Name;
-               await _courseChatRepository.Update(courseChat);
-            }
-            return request.Id;
+
+            return await _courseChatService.UpdateCourseChatAsync(request);
         }
     }
 }

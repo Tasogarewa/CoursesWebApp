@@ -9,7 +9,6 @@ namespace Tasogarewa.Application.CQRS.Notifications.Commands.DeleteNotification
 {
     public class DeleteNotificationCommand:IRequest<Unit>
     {
-        public Guid UserId { get; set; }
         public Guid Id { get; set; }
     }
 }

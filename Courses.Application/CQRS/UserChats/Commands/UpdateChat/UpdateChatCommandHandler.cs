@@ -12,26 +12,16 @@ namespace Tasogarewa.Application.CQRS.UserChats.Commands.UpdateChat
 {
     public class UpdateChatCommandHandler : IRequestHandler<UpdateChatCommand, Guid>
     {
-        private readonly IRepository<Chat> _chatRepository;
+        private readonly IChatService _chatService;
 
-        public UpdateChatCommandHandler(IRepository<Chat> chatRepository)
+        public UpdateChatCommandHandler(IChatService chatService)
         {
-            _chatRepository = chatRepository;
+            _chatService = chatService;
         }
 
         public async Task<Guid> Handle(UpdateChatCommand request, CancellationToken cancellationToken)
         {
-            var chat = await _chatRepository.GetAsync(request.Id);
-            if (chat == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(chat), request.Id);
-            }
-            else
-            {
-                chat.Name = request.Name;
-               await _chatRepository.Update(chat);
-            }
-            return chat.Id;
+            return await _chatService.UpdateChatAsync(request);
         }
     }
 }

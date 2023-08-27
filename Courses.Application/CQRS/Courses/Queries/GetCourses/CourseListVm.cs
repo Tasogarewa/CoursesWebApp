@@ -9,6 +9,6 @@ namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {
     public class CourseListVm
     {
-        public List<CourseDto> CoursesList { get; set; }
+        public List<CourseDto>  courseDtos { get; set; }
     }
 }

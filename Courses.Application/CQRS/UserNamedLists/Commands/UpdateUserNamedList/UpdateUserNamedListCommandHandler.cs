@@ -12,26 +12,16 @@ namespace Tasogarewa.Application.CQRS.UserNamedLists.Commands.UpdateUserNamedLis
 {
     public class UpdateUserNamedListCommandHandler : IRequestHandler<UpdateUserNamedListCommand, Guid>
     {
-        private readonly IRepository<UserNamedList> _userNamedListRepository;
+        private readonly INamedListService _namedListService;
 
-        public UpdateUserNamedListCommandHandler(IRepository<UserNamedList> userNamedListRepository)
+        public UpdateUserNamedListCommandHandler(INamedListService namedListService)
         {
-            _userNamedListRepository = userNamedListRepository;
+            _namedListService = namedListService;
         }
 
         public async Task<Guid> Handle(UpdateUserNamedListCommand request, CancellationToken cancellationToken)
         {
-            var userNamedList = await _userNamedListRepository.GetAsync(request.Id);
-            if (userNamedList == null||request.Id==Guid.Empty) 
-            {
-                throw new NotFoundException(nameof(userNamedList),request.Id);
-            }
-            else
-            {
-                userNamedList.Name=request.Name;
-              await  _userNamedListRepository.Update(userNamedList);
-                return userNamedList.Id;
-            }
+            return await _namedListService.UpdateNamedListAsync(request);
             
         }
     }

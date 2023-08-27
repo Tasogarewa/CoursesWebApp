@@ -12,19 +12,16 @@ namespace Tasogarewa.Application.CQRS.UserArchivedCourse.Commands.CreateArchived
 {
     public class CreateArchivedCourseCommandHandler : IRequestHandler<CreateArchivedCourseCommand, Guid>
     {
-        private readonly IRepository<ArchivedCourse> _archivedCourseRepository;
-        private readonly IRepository<Course> _courseRepository;
+      private readonly IArchivedCourseService _archivedCourseService;
 
-        public CreateArchivedCourseCommandHandler(IRepository<ArchivedCourse> archivedCourseRepository, IRepository<Course> courseRepository)
+        public CreateArchivedCourseCommandHandler(IArchivedCourseService archivedCourseService)
         {
-            _archivedCourseRepository = archivedCourseRepository;
-            _courseRepository = courseRepository;
+            _archivedCourseService = archivedCourseService;
         }
 
         public async Task<Guid> Handle(CreateArchivedCourseCommand request, CancellationToken cancellationToken)
         {
-            var archivedCourse = await _archivedCourseRepository.Create(new ArchivedCourse() { Course = await _courseRepository.GetAsync(request.Id) });
-            return  archivedCourse.Id;    
-           }
+            return await _archivedCourseService.CreateArchivedCourseAsync(request);
+        }
     }
 }

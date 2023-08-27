@@ -11,7 +11,6 @@ namespace Tasogarewa.Application.CQRS.UserArchivedCourse.Commands.DeleteArchived
     {
         public DeleteArchivedCourseCommandValidator() 
         {
-            RuleFor(x => x.CourseId).NotEqual(Guid.Empty);
             RuleFor(x=>x.Id).NotEqual(Guid.Empty);
         }
     }

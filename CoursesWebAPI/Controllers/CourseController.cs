@@ -33,10 +33,11 @@ namespace CoursesWebAPI.Controllers
             return Ok(vm);
         }
         [HttpGet]
-        public async Task<ActionResult<CourseListVm>> GetAll()
+        public async Task<ActionResult<CourseListVm>> GetAll(Guid userId)
         {
             var query = new GetCoursesQuery
             {
+              
             };
             var vm = await Mediator.Send(query);
             return Ok(vm);

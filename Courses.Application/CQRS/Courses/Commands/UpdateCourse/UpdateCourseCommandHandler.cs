@@ -13,33 +13,16 @@ namespace Tasogarewa.Application.CQRS.Courses.Commands.UpdateCourse
 {
     public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, Guid>
     {
-        private readonly IRepository<Course> _courseRepository;
+        private readonly ICourseService _courseService;
 
-        public UpdateCourseCommandHandler(IRepository<Course> courseRepository)
+        public UpdateCourseCommandHandler(ICourseService courseService)
         {
-            _courseRepository = courseRepository;
+            _courseService = courseService;
         }
 
         public async Task<Guid> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
         {
-            var course = await _courseRepository.GetAsync(request.Id);
-            if (course == null ||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(course), request.Id);
-            }
-            else
-            {
-                course.UpdateAt = DateTime.Now;
-                course.Description = request.Description;
-                course.Name = request.Name;
-                course.Price=request.Price;
-                course.Images = request.Images;
-                course.Sections  = request.Sections;
-                course.Requierments = request.Requierments;
-                course.Goals = request.Goals;
-                 await _courseRepository.Update(course);
-                return request.Id;
-            }
+            return await _courseService.UpdateCourseAsync(request);
         }
     }
 }

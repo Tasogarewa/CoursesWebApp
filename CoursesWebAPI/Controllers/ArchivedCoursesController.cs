@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Tasogarewa.Application.CQRS.UserArchivedCourses.Queries.GetArchivedCourses;
 
@@ -7,7 +7,7 @@ namespace CoursesWebAPI.Controllers
     public class ArchivedCoursesController:BaseController
     {
         [HttpGet]
-        public async Task<ActionResult<ArchivedCoursesVm>> Get(Guid userId)
+        public async Task<ActionResult<ArchivedCourseVm>> Get(Guid userId)
         {
             var query = new GetArchivedCoursesQuery
             {

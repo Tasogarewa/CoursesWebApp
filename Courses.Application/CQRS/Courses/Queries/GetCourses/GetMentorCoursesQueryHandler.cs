@@ -14,24 +14,16 @@ namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {
     public class GetMentorCoursesQueryHandler : IRequestHandler<GetMentorCoursesQuery, CourseListVm>
     {
-        private readonly IRepository<Mentor> _mentorRepository;
-        private readonly IMapper _mapper;
+      private readonly ICourseService _courseService;
 
-        public GetMentorCoursesQueryHandler(IRepository<Mentor> mentorRepository, IMapper mapper)
+        public GetMentorCoursesQueryHandler(ICourseService courseService)
         {
-            _mentorRepository = mentorRepository;
-            _mapper = mapper;
+            _courseService = courseService;
         }
 
         public async Task<CourseListVm> Handle(GetMentorCoursesQuery request, CancellationToken cancellationToken)
         {
-            var mentor = await _mentorRepository.GetAsync(request.MentorId);
-            if (mentor == null || request.MentorId == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(mentor), 0);
-            }
-            else
-                return new CourseListVm() { CoursesList = await _mapper.ProjectTo<CourseDto>((IQueryable)mentor.Courses).ToListAsync() };
+            return await _courseService.GetMentorCoursesAsync(request);
         }
     }
 }

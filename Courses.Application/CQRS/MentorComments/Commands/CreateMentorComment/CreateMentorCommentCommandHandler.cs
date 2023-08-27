@@ -12,25 +12,16 @@ namespace Tasogarewa.Application.CQRS.MentorComments.Commands.CreateMentorCommen
 {
     public class CreateMentorCommentCommandHandler : IRequestHandler<CreateMentorCommentCommand, Guid>
     {
-        private readonly IRepository<Mentor> _mentorRepository;
-        private readonly IRepository<Comment> _commentRepository;
-        private readonly IRepository<AppUser> _userRepository;
+      private readonly ICommentService _commentsService;
 
-        public CreateMentorCommentCommandHandler(IRepository<Mentor> mentorRepository, IRepository<Comment> commentRepository, IRepository<AppUser> userRepository)
+        public CreateMentorCommentCommandHandler(ICommentService commentsService)
         {
-            _mentorRepository = mentorRepository;
-            _commentRepository = commentRepository;
-            _userRepository = userRepository;
+            _commentsService = commentsService;
         }
 
         public async Task<Guid> Handle(CreateMentorCommentCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            var mentor = await _mentorRepository.GetAsync(request.MentorId);
-            var comment = await _commentRepository.Create(new Comment() { CreateAt = DateTime.Now, Replay = request.Replay, Text = request.Text, User = user });
-            mentor.Comments.Add(comment);
-            await _mentorRepository.Update(mentor);
-            return comment.Id;
+            return await _commentsService.CreateMentorCommentAsync(request);
         }
     }
 }

@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.UserChats.Commands.DeleteChat
 {
     public class DeleteChatCommandHandler : IRequestHandler<DeleteChatCommand, Unit>
     {
-        private readonly IRepository<Chat> _chatRepository;
+        private readonly IChatService _chatService;
 
-        public DeleteChatCommandHandler(IRepository<Chat> chatRepository)
+        public DeleteChatCommandHandler(IChatService chatService)
         {
-            _chatRepository = chatRepository;
+            _chatService = chatService;
         }
 
         public async Task<Unit> Handle(DeleteChatCommand request, CancellationToken cancellationToken)
         {
-            var chat = await _chatRepository.GetAsync(request.Id);
-            if (chat == null||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(chat), request.Id);
-            }
-            else
-              await  _chatRepository.Delete(chat);
-            return Unit.Value;
+            return await _chatService.DeleteChatAsync(request);
         }
     }
 }

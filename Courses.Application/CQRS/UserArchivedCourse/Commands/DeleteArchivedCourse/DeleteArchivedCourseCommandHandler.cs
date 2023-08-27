@@ -12,26 +12,16 @@ namespace Tasogarewa.Application.CQRS.UserArchivedCourse.Commands.DeleteArchived
 {
     public class DeleteArchivedCourseCommandHandler : IRequestHandler<DeleteArchivedCourseCommand, Unit>
     {
-        private readonly IRepository<ArchivedCourse> _archivedCourseRepository;
+        private readonly IArchivedCourseService _archivedCourseService;
 
-        public DeleteArchivedCourseCommandHandler(IRepository<ArchivedCourse> archivedCourseRepository)
+        public DeleteArchivedCourseCommandHandler(IArchivedCourseService archivedCourseService)
         {
-            _archivedCourseRepository = archivedCourseRepository;
+            _archivedCourseService = archivedCourseService;
         }
 
         public async Task<Unit> Handle(DeleteArchivedCourseCommand request, CancellationToken cancellationToken)
         {
-            var archivedCourse = await _archivedCourseRepository.GetAsync(request.Id);
-
-            if (archivedCourse == null||request.CourseId==Guid.Empty) 
-            {
-                throw new NotFoundException(nameof(archivedCourse), request.Id);
-            }
-            else
-            {
-                 await _archivedCourseRepository.Delete(archivedCourse);
-            }
-            return Unit.Value;
+            return await _archivedCourseService.DeleteArchivedCourseAsync(request);
         }
     }
 }

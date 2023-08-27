@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.WishedCourses.Commands.CreateWishedCourse
 {
     public class CreateWishedCourseCommandHandler : IRequestHandler<CreateWishedCourseCommand, Guid>
     {
-        private readonly IRepository<Course> _courseRepository;
-        private readonly IRepository<UserWishedCourse> _wishedCourseRepository;
-        private readonly IRepository<AppUser> _userRepository;
+       private readonly IWishedCourseService _wishedCourseService;
 
-        public CreateWishedCourseCommandHandler(IRepository<Course> courseRepository, IRepository<UserWishedCourse> wishedCourseRepository, IRepository<AppUser> userRepository)
+        public CreateWishedCourseCommandHandler(IWishedCourseService wishedCourseService)
         {
-            _courseRepository = courseRepository;
-            _wishedCourseRepository = wishedCourseRepository;
-            _userRepository = userRepository;
+            _wishedCourseService = wishedCourseService;
         }
 
         public async Task<Guid> Handle(CreateWishedCourseCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            var wishedCourse = await _wishedCourseRepository.Create(new UserWishedCourse() { WishList=user.UserWishList, Course = await _courseRepository.GetAsync(request.CourseId) });
-
-            return wishedCourse.Id;
+            return await _wishedCourseService.CreateWishedCourseAsync(request);
         }
     }
 }

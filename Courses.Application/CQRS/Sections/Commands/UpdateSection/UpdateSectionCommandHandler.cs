@@ -12,27 +12,16 @@ namespace Tasogarewa.Application.CQRS.Sections.Commands.UpdateSection
 {
     public class UpdateSectionCommandHandler : IRequestHandler<UpdateSectionCommand, Guid>
     {
-        private readonly IRepository<Section> _sectionRepository;
+       private readonly ISectionService _sectionService;
 
-        public UpdateSectionCommandHandler(IRepository<Section> sectionRepository)
+        public UpdateSectionCommandHandler(ISectionService sectionService)
         {
-            _sectionRepository = sectionRepository;
+            _sectionService = sectionService;
         }
 
         public async Task<Guid> Handle(UpdateSectionCommand request, CancellationToken cancellationToken)
         {
-            var section = await _sectionRepository.GetAsync(request.Id);
-            if (section == null||request.Id==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(section),request.Id);
-            }
-            else
-            {
-                section.Lections = request.Lections;
-                section.Name = request.Name;
-               await _sectionRepository.Update(section);
-            }
-            return section.Id;
+            return await _sectionService.UpdateSectionAsync(request);
 
         }
     }

@@ -12,25 +12,16 @@ namespace Tasogarewa.Application.CQRS.CodeExs.Commands.DeleteCodeEx
 {
     public class DeleteCodeExCommandHandler : IRequestHandler<DeleteCodeExCommand, Unit>
     {
-         private readonly IRepository<CodeEx> _codeExRepository;
+        private readonly ICodeExService _codeExService;
 
-        public DeleteCodeExCommandHandler(IRepository<CodeEx> codeExRepository)
+        public DeleteCodeExCommandHandler(ICodeExService codeExService)
         {
-            _codeExRepository = codeExRepository;
+            _codeExService = codeExService;
         }
 
         public async Task<Unit> Handle(DeleteCodeExCommand request, CancellationToken cancellationToken)
         {
-            var codeEx = await _codeExRepository.GetAsync(request.Id);
-            if(request.Id==Guid.Empty||codeEx==null)
-            {
-                throw new NotFoundException(nameof(codeEx), request.Id);
-            }
-            else
-            {
-                await _codeExRepository.Delete(codeEx);
-            }
-            return Unit.Value;
+            return await _codeExService.DeleteCodeExAsync(request);
         }
     }
 }

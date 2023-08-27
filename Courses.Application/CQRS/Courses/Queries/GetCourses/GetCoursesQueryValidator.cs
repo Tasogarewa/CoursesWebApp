@@ -12,7 +12,7 @@ namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
     {
       public GetCoursesQueryValidator()
         {
-            RuleFor(course => course.UserId).NotEqual(Guid.Empty);
+            
         }
     }
 }

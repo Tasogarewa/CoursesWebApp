@@ -12,29 +12,15 @@ namespace Tasogarewa.Application.CQRS.AppUsers.Commands.UpdateAppUser
 {
     public class UpdateAppUserCommandHandler : IRequestHandler<UpdateAppUserCommand, Guid>
     {
-        private readonly IRepository<AppUser> _userRepository;
-
-        public UpdateAppUserCommandHandler(IRepository<AppUser> userRepository)
+        private readonly IUserService _userService;
+        public UpdateAppUserCommandHandler(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         public async Task<Guid> Handle(UpdateAppUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.Id);
-            if (user == null||request.Id==Guid.Empty) 
-            {
-                throw new NotFoundException(nameof(user),request.Id);
-            }
-            else
-            {
-                user.Surname=request.Surname;
-                user.Name=request.Name;
-                user.Email=request.Email;
-                user.Image = request.Image;
-                _userRepository.Update(user);
-                return user.Id;
-            }
+            return await _userService.UpdateUserAsync(request);
         }
     }
 }

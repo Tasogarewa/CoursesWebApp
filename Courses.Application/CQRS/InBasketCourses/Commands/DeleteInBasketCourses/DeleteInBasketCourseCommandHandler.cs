@@ -12,23 +12,16 @@ namespace Tasogarewa.Application.CQRS.InBasketCourses.Commands.DeleteInBasketCou
 {
     public class DeleteInBasketCourseCommandHandler : IRequestHandler<DeleteInBasketCourseCommand, Unit>
     {
-        private readonly IRepository<InBasketCourse> _inBasketCourse;
+      private readonly IBasketCourseService _basketCourseService;
 
-        public DeleteInBasketCourseCommandHandler(IRepository<InBasketCourse> inBasketCourse)
+        public DeleteInBasketCourseCommandHandler(IBasketCourseService basketCourseService)
         {
-            _inBasketCourse = inBasketCourse;
+            _basketCourseService = basketCourseService;
         }
 
         public async Task<Unit> Handle(DeleteInBasketCourseCommand request, CancellationToken cancellationToken)
         {
-           var inBasketCourse = await _inBasketCourse.GetAsync(request.Id);
-            if (inBasketCourse == null || request.Id == Guid.Empty)
-            {
-                throw new NotFoundException(nameof(inBasketCourse), request.Id);
-            }
-            else
-               await _inBasketCourse.Delete(inBasketCourse);
-            return Unit.Value;
+            return await _basketCourseService.DeleteInBasketCourseAsync(request);
         }
     }
 }

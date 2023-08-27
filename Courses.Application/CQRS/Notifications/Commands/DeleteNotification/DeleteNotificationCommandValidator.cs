@@ -12,7 +12,6 @@ namespace Tasogarewa.Application.CQRS.Notifications.Commands.DeleteNotification
         public DeleteNotificationCommandValidator() 
         {
             RuleFor(notification => notification.Id).NotEqual(Guid.Empty);
-            RuleFor(notification => notification.UserId).NotEqual(Guid.Empty);
         }
     }
 }

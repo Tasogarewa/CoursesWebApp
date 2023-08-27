@@ -13,24 +13,16 @@ namespace Tasogarewa.Application.CQRS.CodeExs.Queries.GetCodeEx
 {
     public class GetCodeExQueryHandler : IRequestHandler<GetCodeExQuery, CodeExVm>
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<CodeEx> _codeExRepository;
+        private readonly ICodeExService _codeExService;
 
-        public GetCodeExQueryHandler(IMapper mapper, IRepository<CodeEx> codeExRepository)
+        public GetCodeExQueryHandler(ICodeExService codeExService)
         {
-            _mapper = mapper;
-            _codeExRepository = codeExRepository;
+            _codeExService = codeExService;
         }
 
         public async Task<CodeExVm> Handle(GetCodeExQuery request, CancellationToken cancellationToken)
         {
-            var codeEx = await _codeExRepository.GetAsync(request.Id);
-            if(request.Id==Guid.Empty||codeEx==null)
-            {
-                throw new NotFoundException(nameof(codeEx), request.Id);
-            }
-             else
-                return _mapper.Map<CodeExVm>(codeEx); 
+          return await _codeExService.GetCodeExAsync(request);
         }
     }
 }

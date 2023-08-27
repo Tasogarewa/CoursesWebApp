@@ -13,26 +13,18 @@ using Tasogarewa.Domain;
 
 namespace Tasogarewa.Application.CQRS.UserArchivedCourses.Queries.GetArchivedCourses
 {
-    public class GetArchivedCoursesQueryHandler : IRequestHandler<GetArchivedCoursesQuery, ArchivedCoursesVm>
+    public class GetArchivedCoursesQueryHandler : IRequestHandler<GetArchivedCoursesQuery, ArchivedCourseVm>
     {
-        private readonly IMapper _mapper;
-        private readonly IRepository<AppUser> _userRepository;
+       private readonly IUserService _userService;
 
-        public GetArchivedCoursesQueryHandler(IMapper mapper, IRepository<AppUser> userArchivedCoursesRepository)
+        public GetArchivedCoursesQueryHandler(IUserService userService)
         {
-            _mapper = mapper;
-            _userRepository = userArchivedCoursesRepository;
+            _userService = userService;
         }
 
-        public async Task<ArchivedCoursesVm> Handle(GetArchivedCoursesQuery request, CancellationToken cancellationToken)
+        public async Task<ArchivedCourseVm> Handle(GetArchivedCoursesQuery request, CancellationToken cancellationToken)
         {
-            var archivedCourses = await _userRepository.GetAsync(request.UserId);
-            if (archivedCourses == null || request.UserId==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(archivedCourses), request.UserId);
-            }
-            else
-                return _mapper.Map<ArchivedCoursesVm>(archivedCourses);
+            return await _userService.GetArchivedCoursesAsync(request);
         }
     }
 }

@@ -11,20 +11,15 @@ namespace Tasogarewa.Application.CQRS.CodeExs.Commands.CreateCodeEx
 {
     public class CreateCodeExCommandHandler : IRequestHandler<CreateCodeExCommand, Guid>
     {
-        private readonly IRepository<CodeEx> _codeExRepository;
-        private readonly IRepository<Lection> _lectionRepository;
+        private readonly ICodeExService _codeExService;
 
-        public CreateCodeExCommandHandler(IRepository<CodeEx> codeExRepository, IRepository<Lection> lectionRepository)
+        public CreateCodeExCommandHandler(ICodeExService codeExService)
         {
-            _codeExRepository = codeExRepository;
-            _lectionRepository = lectionRepository;
+            _codeExService = codeExService;
         }
-
         public async Task<Guid> Handle(CreateCodeExCommand request, CancellationToken cancellationToken)
         {
-            var lection = await _lectionRepository.GetAsync(request.LectionId);
-            var codeEx = await _codeExRepository.Create(new CodeEx() { Description = request.Description, Hint = request.Hint, Images = request.Images, Lection = lection, Name = request.Name, Solution = request.Solution });
-            return codeEx.Id;
+            return await _codeExService.CreateCodeExAsync(request);
         }
     }
 }

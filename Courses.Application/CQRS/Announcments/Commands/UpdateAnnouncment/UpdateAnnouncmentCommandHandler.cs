@@ -12,28 +12,16 @@ namespace Tasogarewa.Application.CQRS.Announcments.Commands.UpdateAnnouncments
 {
     public class UpdateAnnouncmentCommandHandler : IRequestHandler<UpdateAnnouncmentCommand, Guid>
     {
-        private readonly IRepository<Announcement> _announcmentsRepository;
+        private readonly IAnnouncmentService _announcmentService;
 
-        public UpdateAnnouncmentCommandHandler(IRepository<Announcement> announcmentsRepository)
+        public UpdateAnnouncmentCommandHandler(IAnnouncmentService announcmentService)
         {
-            _announcmentsRepository = announcmentsRepository;
+            _announcmentService = announcmentService;
         }
 
         public async Task<Guid> Handle(UpdateAnnouncmentCommand request, CancellationToken cancellationToken)
         {
-            var announcment = await _announcmentsRepository.GetAsync(request.Id);
-            if(announcment==null||request.MentorId==Guid.Empty||request.CourseId==Guid.Empty)
-            {
-                throw new NotFoundException(nameof(announcment), request.Id);
-            }
-            else
-            {
-                announcment.UpdateAt = DateTime.Now;
-                announcment.Images = request.Images;
-                announcment.Text = request.Text;
-                _announcmentsRepository.Update(announcment);
-            }
-            return announcment.Id;
+           return await _announcmentService.UpdateAnnoucmentAsync(request);
         }
     }
 }

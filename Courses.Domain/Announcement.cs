@@ -10,6 +10,7 @@ namespace Tasogarewa.Domain
     public class Announcement
     {
         public Guid Id { get; set; }
+        public Guid MentorId { get; set; }
         public virtual Mentor Mentor { get; set; }
         public string Text { get; set; }
         public Guid CourseId { get; set; }

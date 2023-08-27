@@ -12,28 +12,16 @@ namespace Tasogarewa.Application.CQRS.MentorCourseChats.Commands.CreateCourseCha
 {
     public class CreateCourseChatCommandHandler : IRequestHandler<CreateCourseChatCommand, Guid>
     {
-        private readonly IRepository<Mentor> _mentorRepository;
-        private readonly IRepository<Course> _courseRepository;
-        private readonly IRepository<CourseChat> _courseChatRepository;
+        private readonly ICourseChatService _courseChatService;
 
-        public CreateCourseChatCommandHandler(IRepository<Mentor> mentorRepository, IRepository<Course> courseRepository, IRepository<CourseChat> courseChatRepository)
+        public CreateCourseChatCommandHandler(ICourseChatService courseChatService)
         {
-            _mentorRepository = mentorRepository;
-            _courseRepository = courseRepository;
-            _courseChatRepository = courseChatRepository;
+            _courseChatService = courseChatService;
         }
 
         public async Task<Guid> Handle(CreateCourseChatCommand request, CancellationToken cancellationToken)
         {
-            var course = await _courseRepository.GetAsync(request.CourseId);
-            var mentor = await _mentorRepository.GetAsync(request.MentorId);
-            List<AppUser> users = new List<AppUser>();
-            foreach(var user in course.CourseStudents)
-            {
-                users.Add(user.User);
-            }
-            var courseChat = await _courseChatRepository.Create(new CourseChat() { Course = course, Users = users, Mentor = mentor, Name = request.Name }); 
-            return courseChat.Id;
+            return await _courseChatService.CreateCourseChatAsync(request);
         }
     }
 }

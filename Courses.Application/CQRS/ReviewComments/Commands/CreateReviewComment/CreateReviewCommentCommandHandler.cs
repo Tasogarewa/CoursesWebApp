@@ -12,25 +12,16 @@ namespace Tasogarewa.Application.CQRS.ReviewComments.Commands.CreateReviewCommen
 {
     public class CreateReviewCommentCommandHandler : IRequestHandler<CreateReviewCommentCommand, Guid>
     {
-        private readonly IRepository<Review> _reviewRepository;
-        private readonly IRepository<Comment> _commentRepository;
-        private readonly IRepository<AppUser> _userRepository;
+       private readonly ICommentService _commentsService;
 
-        public CreateReviewCommentCommandHandler(IRepository<Review> reviewRepository, IRepository<Comment> commentRepository, IRepository<AppUser> userRepository)
+        public CreateReviewCommentCommandHandler(ICommentService commentsService)
         {
-            _reviewRepository = reviewRepository;
-            _commentRepository = commentRepository;
-            _userRepository = userRepository;
+            _commentsService = commentsService;
         }
 
         public async Task<Guid> Handle(CreateReviewCommentCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            var review = await _reviewRepository.GetAsync(request.ReviewId);
-            var comment = await _commentRepository.Create(new Comment() { CreateAt = DateTime.Now, Replay = request.Replay, Text = request.Text, User = user });
-           review.Comments.Add(comment);
-           await _reviewRepository.Update(review);
-            return comment.Id;
+            return await _commentsService.CreateReviewCommentAsync(request);
         }
     }
 }

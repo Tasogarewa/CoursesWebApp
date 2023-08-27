@@ -19,7 +19,7 @@ namespace Tasogarewa.Persistance.Common
             _dbSet = _dbContext.Set<T>();
 
         }
-        public async Task<T> Create(T entity)
+        public async Task<T> CreateAsync(T entity)
         {
              await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
@@ -28,7 +28,7 @@ namespace Tasogarewa.Persistance.Common
 
         }
 
-        public async Task  Delete(T entity)
+        public async Task  DeleteAsync(T entity)
         {
          _dbSet.Remove(entity);
             await _dbContext.SaveChangesAsync();
@@ -45,7 +45,7 @@ namespace Tasogarewa.Persistance.Common
         }
 
 
-        public  async Task Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();

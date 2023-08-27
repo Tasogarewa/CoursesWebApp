@@ -9,7 +9,6 @@ namespace Tasogarewa.Application.CQRS.Courses.Queries.GetCourses
 {
     public class GetCoursesQuery:IRequest<CourseListVm>
     {
-        public Guid UserId { get; set; }
        
     }
 }

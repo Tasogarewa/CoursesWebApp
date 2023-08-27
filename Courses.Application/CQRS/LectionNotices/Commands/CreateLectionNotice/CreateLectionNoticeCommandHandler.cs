@@ -11,23 +11,16 @@ namespace Tasogarewa.Application.CQRS.LectionNotices.Commands.CreateLectionNotic
 {
     public class CreateLectionNoticeCommandHandler : IRequestHandler<CreateLectionNoticeCommand, Guid>
     {
-        private readonly IRepository<Lection> _lectionRepository;
-        private readonly IRepository<AppUser> _userRepository;
-        private readonly IRepository<LectionNotice> _lectionNoticeRepository;
+       private readonly ILectionNoticeService _lectionNoticeService;
 
-        public CreateLectionNoticeCommandHandler(IRepository<Lection> lectionRepository, IRepository<AppUser> userRepository, IRepository<LectionNotice> lectionNoticeRepository)
+        public CreateLectionNoticeCommandHandler(ILectionNoticeService lectionNoticeService)
         {
-            _lectionRepository = lectionRepository;
-            _userRepository = userRepository;
-            _lectionNoticeRepository = lectionNoticeRepository;
+            _lectionNoticeService = lectionNoticeService;
         }
 
         public async Task<Guid> Handle(CreateLectionNoticeCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.UserId);
-            var lection = await _lectionRepository.GetAsync(request.LectionId);
-            var lectionNotice = await _lectionNoticeRepository.Create(new LectionNotice() { CreateAt = DateTime.Now, From = request.From, Lection = lection, Text = request.Text, User = user });
-            return lectionNotice.Id;
+            return await _lectionNoticeService.CreateLectionNoticeAsync(request);
         }
     }
 }
